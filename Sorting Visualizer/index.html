@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Load d3.js -->
+    <script src="https://d3js.org/d3.v7.min.js" charset="utf-8"></script>
+    <script src="https://d3js.org/d3-scale.v3.min.js"></script>
+
+    <!-- Load css styles -->
+    <link rel="stylesheet" href="sorting.css">
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3.js</title>
+    <style>
+        .container {
+            display: block;
+            margin: auto;
+            width: 250px;
+            height: 200px;
+            border: 1px solid #720570;
+        }
+
+        .bar {
+            fill: #720570;
+        }
+    </style>
+
+    <script src="sorting.js" defer></script>
+
+    <div id="toolbar">
+        <button type="button" class="algorithmButton" id="generate-array">Generate Array</button>
+        <div class="slidecontainer">
+            <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+            <!-- <p>Value: <span id="demo"></span></p> -->
+        </div>
+        <button type="button" class="algorithmButton">Merge Sort</button>
+        <button type="button" class="algorithmButton">Quick Sort</button>
+        <button type="button" class="algorithmButton">Heap Sort</button>
+        <button type="button" class="algorithmButton">Bubble Sort</button>
+        <!-- <div class="algorithmButton">Merge Sort</div>
+        <div class="algorithmButton">Quick Sort</div>
+        <div class="algorithmButton">Heap Sort</div>
+        <div class="algorithmButton">Bubble Sort</div> -->
+    </div>
+
+</head>
+<body>
+    <!-- Create a div where the graph will take place -->
+    <svg></svg>
+</body>
+</html>
