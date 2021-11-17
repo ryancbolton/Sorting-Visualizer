@@ -1,5 +1,4 @@
 
-
 const DUMMY_DATA = [
     { id: 'd1', value: 10, region: 'USA'},
     { id: 'd2', value: 11, region: 'India'},
@@ -53,20 +52,33 @@ slider.oninput = function() {
 // Grabs the "Generate Array" button
 var newarr = document.getElementById("generate-array");
 newarr.onclick = function() {
-    //Find index of specific object using findIndex method.
-    bars.enter()    
+    //Find index of specific object using findIndex method. 
     objIndex = DUMMY_DATA.findIndex((obj => obj.id == 'd1'));
 
     //Log object to Console.
     console.log("Before update: ", DUMMY_DATA[objIndex])
 
-    //Update object's name property.
-    bars.transition()
-    DUMMY_DATA[objIndex].value = Math.floor(Math.random() * 11);
+    //Update object's value properties.
+    DUMMY_DATA.forEach(obj => {
+        for (var i = 0; i < DUMMY_DATA.length; i++) {
+            // console.log(`${key}: ${obj[key]}`);
+            DUMMY_DATA[i].value = Math.floor(Math.random() * 11);
+        }
+    });
+
+    //Updates the bars with newly generated values
+    container
+    .selectAll('.bar')
+    .data(DUMMY_DATA)
+    .transition()
+    .attr('width', xScale.bandwidth())
+    .attr('height', (data) => 200 - yScale(data.value))
+    .attr('x', data => xScale(data.region))
+    .attr('y', data => yScale(data.value));
 
     //Log object to console again.
     console.log("After update: ", DUMMY_DATA[objIndex])
 
-    bars.exit()
+    container.exit()
         .remove()
 };
