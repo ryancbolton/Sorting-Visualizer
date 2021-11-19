@@ -5,6 +5,7 @@ const DUMMY_DATA = [
     { id: 'd3', value: 12, region: 'China'},
     { id: 'd4', value: 6, region: 'Germany'},
 ];
+// const DUMMY_DATA = JSON.parse(values)
 
 const xScale = d3
 .scaleBand()
@@ -42,12 +43,19 @@ const bars = container
 
 var slider = document.getElementById("myRange");
 var output = document.getElementById("demo");
-// output.innerHTML = slider.value; // Display the default slider value
 
-// Update the current slider value (each time you drag the slider handle)
-slider.oninput = function() {
-    output.innerHTML = this.value;
-}
+// Display the default slider value and print to console
+output.innerHTML = slider.value;
+console.log(slider.value)
+
+update=()=>{
+
+    //Output currrently updated slider value and print to console
+    output.innerHTML = slider.value; 
+    console.log(slider.value)
+}   
+//Event listener to detect when slider is being used and invoke update
+slider.addEventListener('input', update);
 
 // Grabs the "Generate Array" button
 var newarr = document.getElementById("generate-array");
