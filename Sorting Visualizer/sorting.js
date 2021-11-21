@@ -1,31 +1,117 @@
 
 const DUMMY_DATA = [
-    { id: 'd1', value: 10, region: 'USA'},
-    { id: 'd2', value: 11, region: 'India'},
-    { id: 'd3', value: 12, region: 'China'},
-    { id: 'd4', value: 6, region: 'Germany'},
+    { id: 'd1', value: 10},
+    { id: 'd2', value: 11},
+    { id: 'd3', value: 12},
+    { id: 'd4', value: 6},
+    { id: 'd5', value: 7},
+    { id: 'd6', value: 13},
+    { id: 'd7', value: 4},
+    { id: 'd8', value: 2},
+    { id: 'd9', value: 14},
+    { id: 'd10', value: 3},
+    { id: 'd11', value: 7},
+    { id: 'd12', value: 6},
+    { id: 'd13', value: 7},
+    { id: 'd14', value: 9},
+    { id: 'd15', value: 9},
+    { id: 'd16', value: 2},
+    { id: 'd17', value: 1},
+    { id: 'd18', value: 15},
+    { id: 'd19', value: 12},
+    { id: 'd20', value: 7},
+    { id: 'd21', value: 7},
+    { id: 'd22', value: 8},
+    { id: 'd23', value: 5},
+    { id: 'd24', value: 5},
+    { id: 'd25', value: 11},
+    { id: 'd26', value: 11},
+    { id: 'd27', value: 12},
+    { id: 'd28', value: 10},
+    { id: 'd29', value: 6},
+    { id: 'd30', value: 13},
+    { id: 'd31', value: 14},
+    { id: 'd32', value: 2},
+    { id: 'd33', value: 12},
+    { id: 'd34', value: 11},
+    { id: 'd35', value: 10},
+    { id: 'd36', value: 5},
+    { id: 'd37', value: 6},
+    { id: 'd38', value: 7},
+    { id: 'd39', value: 14},
+    { id: 'd40', value: 14},
+    { id: 'd41', value: 1},
+    { id: 'd42', value: 0},
+    { id: 'd43', value: 11},
+    { id: 'd44', value: 15},
+    { id: 'd45', value: 7},
+    { id: 'd46', value: 13},
+    { id: 'd47', value: 4},
+    { id: 'd48', value: 4},
+    { id: 'd49', value: 4},
+    { id: 'd50', value: 11},
+    { id: 'd51', value: 10},
+    { id: 'd52', value: 5},
+    { id: 'd53', value: 1},
+    { id: 'd54', value: 6},
+    { id: 'd55', value: 7},
+    { id: 'd56', value: 0},
+    { id: 'd57', value: 0},
+    { id: 'd58', value: 2},
+    { id: 'd59', value: 10},
+    { id: 'd60', value: 11},
+    { id: 'd61', value: 3},
+    { id: 'd62', value: 13},
+    { id: 'd63', value: 7},
+    { id: 'd64', value: 13},
+    { id: 'd65', value: 2},
+    { id: 'd66', value: 2},
+    { id: 'd67', value: 1},
+    { id: 'd68', value: 2},
+    { id: 'd69', value: 3},
+    { id: 'd70', value: 7},
+    { id: 'd71', value: 6},
+    { id: 'd72', value: 10},
+    { id: 'd73', value: 12},
+    { id: 'd74', value: 2},
+    { id: 'd75', value: 10},
+    { id: 'd76', value: 11},
+    { id: 'd77', value: 12},
+    { id: 'd78', value: 2},
+    { id: 'd79', value: 3},
+    { id: 'd80', value: 13},
+    { id: 'd81', value: 14},
+    { id: 'd82', value: 12},
+    { id: 'd83', value: 0},
+    { id: 'd84', value: 11},
+    { id: 'd85', value: 2},
+    { id: 'd86', value: 5},
+    { id: 'd87', value: 7},
+    { id: 'd88', value: 3},
+    { id: 'd89', value: 14},
+    { id: 'd90', value: 12},
+    { id: 'd91', value: 10},
+    { id: 'd92', value: 10},
+    { id: 'd93', value: 10},
+    { id: 'd94', value: 6},
+    { id: 'd95', value: 7},
+    { id: 'd96', value: 13},
+    { id: 'd97', value: 0},
+    { id: 'd98', value: 2},
+    { id: 'd99', value: 1},
+    { id: 'd100', value: 11},
 ];
 // const DUMMY_DATA = JSON.parse(values)
 
 const xScale = d3
-.scaleBand()
-.domain(DUMMY_DATA.map((dataPoint) => dataPoint.region))
-.rangeRound([0, 250])
-.padding(0.1);
-const yScale = d3.scaleLinear().domain([0, 15]).range([200, 0]);
-
-// //selects main div
-// d3.select('div')
-//     //selects all paragraphs in that div
-//     .selectAll('p')
-//     //binds data to the paragraphs
-//     .data(DUMMY_DATA)
-//     //tells which paragraphs are missing
-//     .enter()
-//     //append a new paragraph for every missing paragraph
-//     .append('p')
-//     //sets text inside every created paragraph
-//     .text(dta => dta.region);
+.scaleBand() //Gives all bars/items the same width
+.domain(DUMMY_DATA.map((dataPoint) => dataPoint.id)) //Tells scaleBand() how many data points there are based on the number of ids
+.rangeRound([0, 1000]) //Sets the range of the area the bars are generated in, i.e. the width of the container
+.padding(0.1); //Puts padding between the bars
+const yScale = d3
+.scaleLinear() //Gives y coordinates function to position the heights of the bars
+.domain([0, 15]) //Specifies the min and max range of height values of the bars
+.range([600, 0]); //Sets range of the height of the container that the bars will sit in
 
 const container = d3.select('svg')
     .classed('container', true);
@@ -36,27 +122,13 @@ const bars = container
     .enter()
     .append('rect')
     .classed('bar', true)
-    .attr('width', xScale.bandwidth())
-    .attr('height', (data) => 200 - yScale(data.value))
-    .attr('x', data => xScale(data.region))
+    .attr('width', xScale.bandwidth()) //Takes available width and divides by the number of data points (ids) to give equal widths
+    .attr('height', (data) => 600 - yScale(data.value))
+    .attr('x', data => xScale(data.id))
     .attr('y', data => yScale(data.value));
 
-var slider = document.getElementById("myRange");
-var output = document.getElementById("demo");
 
-// Display the default slider value and print to console
-output.innerHTML = slider.value;
-console.log(slider.value)
-
-update=()=>{
-
-    //Output currrently updated slider value and print to console
-    output.innerHTML = slider.value; 
-    console.log(slider.value)
-}   
-//Event listener to detect when slider is being used and invoke update
-slider.addEventListener('input', update);
-
+/////////////////////////////////////////////   Generate button functions    ///////////////////////////////////////////////////////
 // Grabs the "Generate Array" button
 var newarr = document.getElementById("generate-array");
 newarr.onclick = function() {
@@ -70,7 +142,7 @@ newarr.onclick = function() {
     DUMMY_DATA.forEach(obj => {
         for (var i = 0; i < DUMMY_DATA.length; i++) {
             // console.log(`${key}: ${obj[key]}`);
-            DUMMY_DATA[i].value = Math.floor(Math.random() * 11);
+            DUMMY_DATA[i].value = Math.floor(Math.random() * 16);
         }
     });
 
@@ -80,8 +152,8 @@ newarr.onclick = function() {
     .data(DUMMY_DATA)
     .transition()
     .attr('width', xScale.bandwidth())
-    .attr('height', (data) => 200 - yScale(data.value))
-    .attr('x', data => xScale(data.region))
+    .attr('height', (data) => 600 - yScale(data.value))
+    .attr('x', data => xScale(data.id))
     .attr('y', data => yScale(data.value));
 
     //Log object to console again.
@@ -90,3 +162,20 @@ newarr.onclick = function() {
     container.exit()
         .remove()
 };
+
+/////////////////////////////////////////////   Slider functions    ///////////////////////////////////////////////////////
+var slider = document.getElementById("myRange");
+var output = document.getElementById("demo");
+
+// Display the default slider value and print to console
+output.innerHTML = slider.value;
+console.log(slider.value)
+
+update=()=>{
+
+    //Output currently updated slider value and print to console
+    output.innerHTML = slider.value; 
+    console.log(slider.value)
+}   
+//Event listener to detect when slider is being used and invoke update
+slider.addEventListener('input', update);

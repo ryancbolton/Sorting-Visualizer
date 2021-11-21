@@ -1,5 +1,12 @@
 .slidecontainer {
     width: 10%; /* Width of the outside container */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  p {
+    display: flex;
   }
   
   /* The slider itself */
@@ -38,6 +45,7 @@
   }
 
 #toolbar {
+  width: 100%;
   background-color: gainsboro;
   display: flex;
   align-items: center;
