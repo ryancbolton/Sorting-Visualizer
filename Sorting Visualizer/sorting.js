@@ -102,7 +102,7 @@ const DUMMY_DATA = [
     { id: 'd100', value: 11},
 ];
 
-const xScale = d3
+var xScale = d3
 .scaleBand() //Gives all bars/items the same width
 .domain(DUMMY_DATA.map((dataPoint) => dataPoint.id)) //Tells scaleBand() how many data points there are based on the number of ids
 .rangeRound([0, 1000]) //Sets the range of the area the bars are generated in, i.e. the width of the container
@@ -142,7 +142,6 @@ newarr.onclick = function() {
     //Update object's value properties.
     DUMMY_DATA.forEach(obj => {
         for (var i = 0; i < DUMMY_DATA.length; i++) {
-            // console.log(`${key}: ${obj[key]}`);
             DUMMY_DATA[i].value = Math.floor(Math.random() * 16);
         }
     });
@@ -186,6 +185,13 @@ update=()=>{
     //Take portion of original dataset
     SLIDER_DATA = DUMMY_DATA.slice(0, slider.value)
 
+    //Change xscale to be based off new SLIDER array instead of original DUMMY array
+    xScale = d3
+        .scaleBand() //Gives all bars/items the same width
+        .domain(SLIDER_DATA.map((dataPoint) => dataPoint.id)) //Tells scaleBand() how many data points there are based on the number of ids
+        .rangeRound([0, 1000]) //Sets the range of the area the bars are generated in, i.e. the width of the container
+        .padding(0.1); //Puts padding between the bars
+
     // Create the u variable
     var u = container.selectAll(".bar")
     .data(SLIDER_DATA)
@@ -193,13 +199,20 @@ update=()=>{
     //Update object's value properties.
     SLIDER_DATA.forEach(obj => {
         for (var i = 0; i < SLIDER_DATA.length; i++) {
-            // console.log(`${key}: ${obj[key]}`);
             SLIDER_DATA[i].value = Math.floor(Math.random() * 16);
-
         }
     });
 
-    //Updates the bars with newly generated values
+    //Makes the existing values change once new ones are added or removed
+    container
+    .selectAll('.bar')
+    .data(DUMMY_DATA)
+    .attr('width', xScale.bandwidth())
+    .attr('height', (data) => 600 - yScale(data.value))
+    .attr('x', data => xScale(data.id))
+    .attr('y', data => yScale(data.value));
+
+    //Adds any new bars if slider is moved up
     u
     .enter()
     .append('rect')
@@ -209,7 +222,7 @@ update=()=>{
     .attr('x', data => xScale(data.id))
     .attr('y', data => yScale(data.value))
 
-     // If less group in the new dataset, I delete the ones not in use anymore
+     //Removes any old bars if slider is moved down
      u.exit()
         .remove()
 
