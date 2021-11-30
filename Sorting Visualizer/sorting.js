@@ -101,7 +101,6 @@ const DUMMY_DATA = [
     { id: 'd99', value: 1},
     { id: 'd100', value: 11},
 ];
-// const DUMMY_DATA = JSON.parse(values)
 
 const xScale = d3
 .scaleBand() //Gives all bars/items the same width
@@ -163,8 +162,11 @@ newarr.onclick = function() {
         console.log("After update: ", DUMMY_DATA[objIndex])
     }
 
-    container.exit()
-        .remove()
+    container
+    .selectAll('.bar')
+    .data(DUMMY_DATA)
+    .exit()
+    .remove()
 };
 
 /////////////////////////////////////////////   Slider functions    ///////////////////////////////////////////////////////
@@ -182,7 +184,7 @@ update=()=>{
     console.log(slider.value)
 
     //Take portion of original dataset
-    SLIDER_DATA = DUMMY_DATA.splice(0, slider.value)
+    SLIDER_DATA = DUMMY_DATA.slice(0, slider.value)
 
     // Create the u variable
     var u = container.selectAll(".bar")
@@ -199,21 +201,17 @@ update=()=>{
 
     //Updates the bars with newly generated values
     u
-    .transition()
+    .enter()
+    .append('rect')
+    .classed('bar', true)
     .attr('width', xScale.bandwidth())
     .attr('height', (data) => 600 - yScale(data.value))
     .attr('x', data => xScale(data.id))
     .attr('y', data => yScale(data.value))
 
      // If less group in the new dataset, I delete the ones not in use anymore
-     u
-     .exit()
-     .transition() // and apply changes to all of them
-     .duration(1000)
-     .style("opacity", 0)
-     .remove()
-
-    DUMMY_DATA.splice(0, 0, ...SLIDER_DATA);
+     u.exit()
+        .remove()
 
 }   
 //Event listener to detect when slider is being used and invoke update
