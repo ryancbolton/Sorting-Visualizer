@@ -133,10 +133,12 @@ const bars = container
 var newarr = document.getElementById("generate-array");
 newarr.onclick = function() {
     //Find index of specific object using findIndex method. 
-    objIndex = DUMMY_DATA.findIndex((obj => obj.id == 'd1'));
+    objIndex = DUMMY_DATA.findIndex((obj => obj.id));
 
     //Log object to Console.
-    console.log("Before update: ", DUMMY_DATA[objIndex])
+    for (objIndex in DUMMY_DATA) {
+        console.log("Before update: ", DUMMY_DATA[objIndex])
+    }
 
     //Update object's value properties.
     DUMMY_DATA.forEach(obj => {
@@ -157,7 +159,9 @@ newarr.onclick = function() {
     .attr('y', data => yScale(data.value));
 
     //Log object to console again.
-    console.log("After update: ", DUMMY_DATA[objIndex])
+    for (objIndex in DUMMY_DATA) {
+        console.log("After update: ", DUMMY_DATA[objIndex])
+    }
 
     container.exit()
         .remove()
@@ -178,51 +182,39 @@ update=()=>{
     console.log(slider.value)
 
     //Take portion of original dataset
-    data2 = DUMMY_DATA.slice(0, slider.value)
+    SLIDER_DATA = DUMMY_DATA.splice(0, slider.value)
 
     // Create the u variable
-    var u = container.selectAll("rect")
-    .data(data2)
+    var u = container.selectAll(".bar")
+    .data(SLIDER_DATA)
 
+    //Update object's value properties.
+    SLIDER_DATA.forEach(obj => {
+        for (var i = 0; i < SLIDER_DATA.length; i++) {
+            // console.log(`${key}: ${obj[key]}`);
+            SLIDER_DATA[i].value = Math.floor(Math.random() * 16);
+
+        }
+    });
+
+    //Updates the bars with newly generated values
     u
-    .transition() // and apply changes to all of them
-    .duration(1000)
-        .attr('width', xScale.bandwidth())
-        .attr('height', (data) => 600 - yScale(data.value))
-        .attr('x', data => xScale(data.id))
-        .attr('y', data => yScale(data.value))
+    .transition()
+    .attr('width', xScale.bandwidth())
+    .attr('height', (data) => 600 - yScale(data.value))
+    .attr('x', data => xScale(data.id))
+    .attr('y', data => yScale(data.value))
 
-    // If less group in the new dataset, I delete the ones not in use anymore
-    u
-    .exit()
-    .transition() // and apply changes to all of them
-    .duration(1000)
-    .style("opacity", 0)
-    .remove()
+     // If less group in the new dataset, I delete the ones not in use anymore
+     u
+     .exit()
+     .transition() // and apply changes to all of them
+     .duration(1000)
+     .style("opacity", 0)
+     .remove()
 
-    // //Update object's value properties.
-    // SLIDER_DATA.forEach(obj => {
-    //     for (var i = 0; i < SLIDER_DATA.length; i++) {
-    //         // console.log(`${key}: ${obj[key]}`);
-    //         SLIDER_DATA[i].value = Math.floor(Math.random() * 16);
+    DUMMY_DATA.splice(0, 0, ...SLIDER_DATA);
 
-    //     }
-    // });
-
-    // //Updates the bars with newly generated values
-    // container
-    // .selectAll('.bar')
-    // .data(SLIDER_DATA)
-    // .transition()
-    // .attr('width', xScale.bandwidth())
-    // .attr('height', (data) => 600 - yScale(data.value))
-    // .attr('x', data => xScale(data.id))
-    // .attr('y', data => yScale(data.value))
-
-    // container.exit()
-    //     .remove()
-
-    //DUMMY_DATA.splice(1, 0, ...SLIDER_DATA);
 }   
 //Event listener to detect when slider is being used and invoke update
 slider.addEventListener('input', update);
