@@ -226,6 +226,16 @@ update=()=>{
      u.exit()
         .remove()
 
+    return SLIDER_DATA
+
 }   
 //Event listener to detect when slider is being used and invoke update
 slider.addEventListener('input', update);
+
+/////////////////////////////////////////////   Bubble sort functions    ///////////////////////////////////////////////////////
+// Grabs the "Generate Array" button
+var bubblesort = document.getElementById("bubble-sort");
+bubbleort.onclick = function() {
+    var bubblearr = update()
+    console.log(bubblearr)
+}
