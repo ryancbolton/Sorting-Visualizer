@@ -235,7 +235,42 @@ slider.addEventListener('input', update);
 /////////////////////////////////////////////   Bubble sort functions    ///////////////////////////////////////////////////////
 // Grabs the "Generate Array" button
 var bubblesort = document.getElementById("bubble-sort");
-bubbleort.onclick = function() {
-    var bubblearr = update()
+bubblesort.onclick = function() {
+    bubblearr = [];
+    var SLIDER_DATA = update()
+
+    for (var i = 0; i < SLIDER_DATA.length; i++) {
+        bubblearr.push(SLIDER_DATA[i].value);
+    }
+
+    for(var i = 0; i < bubblearr.length; i++){
+     
+        // Last i elements are already in place  
+        for(var j = 0; j < (bubblearr.length - i -1 ); j++){
+            
+          // Checking if the item at present iteration 
+          // is greater than the next iteration
+          if(bubblearr[j] > bubblearr[j+1]){
+              
+            // If the condition is true then swap them
+            var temp = bubblearr[j]
+            bubblearr[j] = bubblearr[j + 1]
+            bubblearr[j+1] = temp
+          }
+        }
+    }
+
+    var a = [];
+    var res = {};
+    for (var i = 0; i < SLIDER_DATA.length; i++) {
+        a.push(SLIDER_DATA[i].id);
+    }
+
+    for (var i = 0; i < a.length; i++)
+        res[a[i]] = bubblearr[i];
+    
+    console.log(res)
+
+    // Print the sorted array
     console.log(bubblearr)
 }
