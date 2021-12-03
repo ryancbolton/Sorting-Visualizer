@@ -102,6 +102,8 @@ const DUMMY_DATA = [
     { id: 'd100', value: 11},
 ];
 
+console.log(DUMMY_DATA)
+
 var xScale = d3
 .scaleBand() //Gives all bars/items the same width
 .domain(DUMMY_DATA.map((dataPoint) => dataPoint.id)) //Tells scaleBand() how many data points there are based on the number of ids
@@ -176,6 +178,9 @@ var output = document.getElementById("demo");
 output.innerHTML = slider.value;
 console.log(slider.value)
 
+// //Take portion of original dataset
+// SLIDER_DATA = DUMMY_DATA.slice(0, slider.value)
+
 update=()=>{
 
     //Output currently updated slider value and print to console
@@ -223,8 +228,9 @@ update=()=>{
     .attr('y', data => yScale(data.value))
 
      //Removes any old bars if slider is moved down
-     u.exit()
-        .remove()
+    u
+    .exit()
+    .remove()
 
     return SLIDER_DATA
 
@@ -236,6 +242,7 @@ slider.addEventListener('input', update);
 // Grabs the "Generate Array" button
 var bubblesort = document.getElementById("bubble-sort");
 bubblesort.onclick = function() {
+
     bubblearr = [];
     var SLIDER_DATA = update()
 
@@ -260,14 +267,45 @@ bubblesort.onclick = function() {
         }
     }
 
+    //Adds the ids from the SLIDER_DATA array to the empty 'a' array
     var a = [];
-    var res = {};
+    var res = {}; //empty res object
     for (var i = 0; i < SLIDER_DATA.length; i++) {
         a.push(SLIDER_DATA[i].id);
     }
 
+    //Pairs each integer in the 'bubblearr' array with an id in the 'a' array and adds these objects to the 'res' array
     for (var i = 0; i < a.length; i++)
         res[a[i]] = bubblearr[i];
+
+    // //Updates the bars with newly generated values
+    // container
+    // .selectAll('.bar')
+    // .data(res)
+    // .enter()
+    // .append('rect')
+    // .attr('width', xScale.bandwidth())
+    // .attr('height', (data) => 600 - yScale(data.value))
+    // .attr('x', data => xScale(data.id))
+    // .attr('y', data => yScale(data.value));
+
+    container
+    .selectAll('.bar')
+    .data(DUMMY_DATA)
+    .exit()
+    .remove()
+
+    container
+    .selectAll('.bar')
+    .data(SLIDER_DATA)
+    .exit()
+    .remove()
+
+    container
+    .selectAll('.bar')
+    .data(res)
+    .enter()
+    .append('rect')
     
     console.log(res)
 
