@@ -270,6 +270,7 @@ bubblesort.onclick = function() {
     //Adds the ids from the SLIDER_DATA array to the empty 'a' array
     var a = [];
     var res = {}; //empty res object
+    var e = [];
     for (var i = 0; i < SLIDER_DATA.length; i++) {
         a.push(SLIDER_DATA[i].id);
     }
@@ -277,37 +278,32 @@ bubblesort.onclick = function() {
     //Pairs each integer in the 'bubblearr' array with an id in the 'a' array and adds these objects to the 'res' array
     for (var i = 0; i < a.length; i++)
         res[a[i]] = bubblearr[i];
+        e.push(res)
 
-    // //Updates the bars with newly generated values
+    //Updates the bars with newly generated values
+    container
+    .selectAll('.bar')
+    .data(e)
+    .transition()
+    .attr('width', xScale.bandwidth())
+    .attr('height', (data) => 600 - yScale(data.value))
+    .attr('x', data => xScale(data.id))
+    .attr('y', data => yScale(data.value));
+
     // container
     // .selectAll('.bar')
     // .data(res)
-    // .enter()
-    // .append('rect')
-    // .attr('width', xScale.bandwidth())
-    // .attr('height', (data) => 600 - yScale(data.value))
-    // .attr('x', data => xScale(data.id))
-    // .attr('y', data => yScale(data.value));
+    // .transition()
+    // .duration(1000)
 
     container
     .selectAll('.bar')
-    .data(DUMMY_DATA)
+    .data(e)
     .exit()
     .remove()
 
-    container
-    .selectAll('.bar')
-    .data(SLIDER_DATA)
-    .exit()
-    .remove()
-
-    container
-    .selectAll('.bar')
-    .data(res)
-    .enter()
-    .append('rect')
-    
     console.log(res)
+    console.log(e)
 
     // Print the sorted array
     console.log(bubblearr)
