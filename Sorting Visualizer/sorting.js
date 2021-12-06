@@ -238,73 +238,68 @@ update=()=>{
 //Event listener to detect when slider is being used and invoke update
 slider.addEventListener('input', update);
 
+//Creates global slider data array for use in the sorting functions (was previously inside the sorting function itself below vals array initiation)
+var SLIDER_DATA = update()
+
 /////////////////////////////////////////////   Bubble sort functions    ///////////////////////////////////////////////////////
-// Grabs the "Generate Array" button
+// Grabs the "Bubble sort" button
 var bubblesort = document.getElementById("bubble-sort");
+
 bubblesort.onclick = function() {
+    var vals = []; //initializes array for slider array values
+    var ids = []; //initializes array for slider array ids
+    var bubblearr = []; //empty final array
 
-    bubblearr = [];
-    var SLIDER_DATA = update()
-
+    //Adds the values from the SLIDER_DATA array to the empty 'vals' array
     for (var i = 0; i < SLIDER_DATA.length; i++) {
-        bubblearr.push(SLIDER_DATA[i].value);
+        vals.push(SLIDER_DATA[i].value);
     }
 
-    for(var i = 0; i < bubblearr.length; i++){
+    //Adds the ids from the SLIDER_DATA array to the empty 'ids' array
+    for (var i = 0; i < SLIDER_DATA.length; i++) {
+        ids.push(SLIDER_DATA[i].id);
+    }
+
+    //Bubble sort function (copied from https://www.geeksforgeeks.org/bubble-sort-algorithms-by-using-javascript/)
+    for(var i = 0; i < vals.length; i++){
      
         // Last i elements are already in place  
-        for(var j = 0; j < (bubblearr.length - i -1 ); j++){
+        for(var j = 0; j < (vals.length - i -1 ); j++){
             
-          // Checking if the item at present iteration 
-          // is greater than the next iteration
-          if(bubblearr[j] > bubblearr[j+1]){
+          // Checking if the item at present iteration is greater than the next iteration
+          if(vals[j] > vals[j+1]){
               
             // If the condition is true then swap them
-            var temp = bubblearr[j]
-            bubblearr[j] = bubblearr[j + 1]
-            bubblearr[j+1] = temp
+            var temp = vals[j]
+            vals[j] = vals[j + 1]
+            vals[j+1] = temp
           }
         }
     }
 
-    //Adds the ids from the SLIDER_DATA array to the empty 'a' array
-    var a = [];
-    var res = {}; //empty res object
-    var e = [];
-    for (var i = 0; i < SLIDER_DATA.length; i++) {
-        a.push(SLIDER_DATA[i].id);
-    }
-
-    //Pairs each integer in the 'bubblearr' array with an id in the 'a' array and adds these objects to the 'res' array
-    for (var i = 0; i < a.length; i++)
-        res[a[i]] = bubblearr[i];
-        e.push(res)
+    //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
+    for (var i = 0; i < ids.length; i++)
+        bubblearr[i] = {id: ids[i], value: vals[i]}
 
     //Updates the bars with newly generated values
     container
     .selectAll('.bar')
-    .data(e)
+    .data(bubblearr)
     .transition()
+    .duration(800)
     .attr('width', xScale.bandwidth())
     .attr('height', (data) => 600 - yScale(data.value))
     .attr('x', data => xScale(data.id))
     .attr('y', data => yScale(data.value));
 
-    // container
-    // .selectAll('.bar')
-    // .data(res)
-    // .transition()
-    // .duration(1000)
-
     container
     .selectAll('.bar')
-    .data(e)
+    .data(bubblearr)
     .exit()
     .remove()
 
-    console.log(res)
-    console.log(e)
+    // console.log(bubblearr)
 
-    // Print the sorted array
-    console.log(bubblearr)
+    // // Print the sorted array
+    // console.log(vals)
 }
