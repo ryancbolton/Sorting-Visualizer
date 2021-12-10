@@ -126,7 +126,7 @@ const bars = container
     .attr('width', xScale.bandwidth()) //Takes available width and divides by the number of data points (ids) to give equal widths
     .attr('height', (data) => 600 - yScale(data.value))
     .attr('x', data => xScale(data.id))
-    .attr('y', data => yScale(data.value));
+    .attr('y', data => yScale(data.value))
 
 
 /////////////////////////////////////////////   Generate button functions    ///////////////////////////////////////////////////////
@@ -156,7 +156,8 @@ newarr.onclick = function() {
     .attr('width', xScale.bandwidth())
     .attr('height', (data) => 600 - yScale(data.value))
     .attr('x', data => xScale(data.id))
-    .attr('y', data => yScale(data.value));
+    .attr('y', data => yScale(data.value))
+    .attr("fill", "#720570");
 
     //Log object to console again.
     for (objIndex in DUMMY_DATA) {
@@ -169,6 +170,7 @@ newarr.onclick = function() {
     .exit()
     .remove()
 };
+
 
 /////////////////////////////////////////////   Slider functions    ///////////////////////////////////////////////////////
 var slider = document.getElementById("myRange");
@@ -215,7 +217,8 @@ update=()=>{
     .attr('width', xScale.bandwidth())
     .attr('height', (data) => 600 - yScale(data.value))
     .attr('x', data => xScale(data.id))
-    .attr('y', data => yScale(data.value));
+    .attr('y', data => yScale(data.value))
+    .attr("fill", "#720570");
 
     //Adds any new bars if slider is moved up
     u
@@ -226,6 +229,7 @@ update=()=>{
     .attr('height', (data) => 600 - yScale(data.value))
     .attr('x', data => xScale(data.id))
     .attr('y', data => yScale(data.value))
+    .attr("fill", "#720570");
 
      //Removes any old bars if slider is moved down
     u
@@ -266,37 +270,65 @@ bubblesort.onclick = function() {
         // Last i elements are already in place  
         for(var j = 0; j < (vals.length - i -1 ); j++){
             
-          // Checking if the item at present iteration is greater than the next iteration
-          if(vals[j] > vals[j+1]){
-              
-            // If the condition is true then swap them
-            var temp = vals[j]
-            vals[j] = vals[j + 1]
-            vals[j+1] = temp
-          }
-        }
-    }
+            // Checking if the item at present iteration is greater than the next iteration
+            if(vals[j] > vals[j+1]){
 
-    //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
-    for (var i = 0; i < ids.length; i++)
+                //Updates the bars with newly generated values
+                container
+                .select('rect')
+                .data(bubblearr)
+                // .transition()
+                // .duration(800)
+                .attr('width', xScale.bandwidth())
+                .attr('height', (data) => 600 - yScale(data.value))
+                .attr('x', data => xScale(data.id))
+                .attr('y', data => yScale(data.value))
+                .attr("fill", "red");
+              
+                // If the condition is true then swap them
+                var temp = vals[j]
+                vals[j] = vals[j + 1]
+                vals[j+1] = temp
+            }
+        }
         bubblearr[i] = {id: ids[i], value: vals[i]}
 
-    //Updates the bars with newly generated values
-    container
-    .selectAll('.bar')
-    .data(bubblearr)
-    .transition()
-    .duration(800)
-    .attr('width', xScale.bandwidth())
-    .attr('height', (data) => 600 - yScale(data.value))
-    .attr('x', data => xScale(data.id))
-    .attr('y', data => yScale(data.value));
+        //Updates the bars with newly generated values
+        container
+        .selectAll('rect')
+        .data(bubblearr)
+        .transition()
+        .duration(800)
+        .attr('width', xScale.bandwidth())
+        .attr('height', (data) => 600 - yScale(data.value))
+        .attr('x', data => xScale(data.id))
+        .attr('y', data => yScale(data.value))
+        .attr("fill", "green");
+
+    }
+
+    // //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
+    // for (var i = 0; i < ids.length; i++)
+        // bubblearr[i] = {id: ids[i], value: vals[i]}
+
+    // //Updates the bars with newly generated values
+    // container
+    // .selectAll('.bar')
+    // .data(bubblearr)
+    // .transition()
+    // .duration(800)
+    // .attr('width', xScale.bandwidth())
+    // .attr('height', (data) => 600 - yScale(data.value))
+    // .attr('x', data => xScale(data.id))
+    // .attr('y', data => yScale(data.value))
+    // .attr("fill", "green");
 
     container
     .selectAll('.bar')
     .data(bubblearr)
     .exit()
     .remove()
+
 
     // console.log(bubblearr)
 
