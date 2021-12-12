@@ -231,7 +231,7 @@ update=()=>{
     .attr('y', data => yScale(data.value))
     .attr("fill", "#720570");
 
-     //Removes any old bars if slider is moved down
+    //Removes any old bars if slider is moved down
     u
     .exit()
     .remove()
@@ -245,7 +245,7 @@ slider.addEventListener('input', update);
 //Creates global slider data array for use in the sorting functions (was previously inside the sorting function itself below vals array initiation)
 var SLIDER_DATA = update()
 
-/////////////////////////////////////////////   Bubble sort functions    ///////////////////////////////////////////////////////
+/////////////////////////////////////////////   Bubble sort function    ///////////////////////////////////////////////////////
 // Grabs the "Bubble sort" button
 var bubblesort = document.getElementById("bubble-sort");
 
@@ -272,18 +272,6 @@ bubblesort.onclick = function() {
             
             // Checking if the item at present iteration is greater than the next iteration
             if(vals[j] > vals[j+1]){
-
-                //Updates the bars with newly generated values
-                container
-                .select('rect')
-                .data(bubblearr)
-                // .transition()
-                // .duration(800)
-                .attr('width', xScale.bandwidth())
-                .attr('height', (data) => 600 - yScale(data.value))
-                .attr('x', data => xScale(data.id))
-                .attr('y', data => yScale(data.value))
-                .attr("fill", "red");
               
                 // If the condition is true then swap them
                 var temp = vals[j]
@@ -291,37 +279,25 @@ bubblesort.onclick = function() {
                 vals[j+1] = temp
             }
         }
-        bubblearr[i] = {id: ids[i], value: vals[i]}
-
-        //Updates the bars with newly generated values
-        container
-        .selectAll('rect')
-        .data(bubblearr)
-        .transition()
-        .duration(800)
-        .attr('width', xScale.bandwidth())
-        .attr('height', (data) => 600 - yScale(data.value))
-        .attr('x', data => xScale(data.id))
-        .attr('y', data => yScale(data.value))
-        .attr("fill", "green");
-
     }
 
-    // //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
-    // for (var i = 0; i < ids.length; i++)
-        // bubblearr[i] = {id: ids[i], value: vals[i]}
+    //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
+    for (var i = 0; i < ids.length; i++)
+        bubblearr[i] = {id: ids[i], value: vals[i]}
+    
+    sortbubble(bubblearr, SLIDER_DATA);
 
-    // //Updates the bars with newly generated values
-    // container
-    // .selectAll('.bar')
-    // .data(bubblearr)
-    // .transition()
-    // .duration(800)
-    // .attr('width', xScale.bandwidth())
-    // .attr('height', (data) => 600 - yScale(data.value))
-    // .attr('x', data => xScale(data.id))
-    // .attr('y', data => yScale(data.value))
-    // .attr("fill", "green");
+    //Updates the bars with newly generated values
+    container
+    .selectAll('.bar')
+    .data(bubblearr)
+    .transition()
+    .duration(800)
+    .attr('width', xScale.bandwidth())
+    .attr('height', (data) => 600 - yScale(data.value))
+    .attr('x', data => xScale(data.id))
+    .attr('y', data => yScale(data.value))
+    .attr("fill", "green");
 
     container
     .selectAll('.bar')
@@ -334,4 +310,46 @@ bubblesort.onclick = function() {
 
     // // Print the sorted array
     // console.log(vals)
+}
+
+function sortbubble(barr, sarr) {
+    var bubblearr = barr;
+    var SLIDER_ARRAY = sarr;
+
+    var u = container.selectAll(".bar")
+    .data(SLIDER_DATA)
+
+    //Take the new array and go through each array, comparing the values and swapping them
+
+
+
+
+    // //Updates the bars with newly generated values
+    // container
+    // .select('rect')
+    // .data(bubblearr)
+    // // .transition()
+    // // .duration(800)
+    // .attr('width', xScale.bandwidth())
+    // .attr('height', (data) => 600 - yScale(data.value))
+    // .attr('x', data => xScale(data.id))
+    // .attr('y', data => yScale(data.value))
+    // .attr("fill", "red");
+
+
+    // bubblearr[i] = {id: ids[i], value: vals[i]}
+
+
+    // //Updates the bars with newly generated values
+    // container
+    // .selectAll('rect')
+    // .data(bubblearr)
+    // .transition()
+    // .duration(500)
+    // .attr('width', xScale.bandwidth())
+    // .attr('height', (data) => 600 - yScale(data.value))
+    // .attr('x', data => xScale(data.id))
+    // .attr('y', data => yScale(data.value))
+    // .attr("fill", "green");
+
 }
