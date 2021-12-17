@@ -272,84 +272,49 @@ bubblesort.onclick = function() {
             
             // Checking if the item at present iteration is greater than the next iteration
             if(vals[j] > vals[j+1]){
-              
+
                 // If the condition is true then swap them
                 var temp = vals[j]
                 vals[j] = vals[j + 1]
                 vals[j+1] = temp
             }
+            // bubblearr[i] = {id: ids[i], value: vals[i]}
         }
     }
 
     //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
     for (var i = 0; i < ids.length; i++)
         bubblearr[i] = {id: ids[i], value: vals[i]}
-    
-    sortbubble(bubblearr, SLIDER_DATA);
-
-    //Updates the bars with newly generated values
-    container
-    .selectAll('.bar')
-    .data(bubblearr)
-    .transition()
-    .duration(800)
-    .attr('width', xScale.bandwidth())
-    .attr('height', (data) => 600 - yScale(data.value))
-    .attr('x', data => xScale(data.id))
-    .attr('y', data => yScale(data.value))
-    .attr("fill", "green");
-
-    container
-    .selectAll('.bar')
-    .data(bubblearr)
-    .exit()
-    .remove()
-
-
-    // console.log(bubblearr)
-
-    // // Print the sorted array
-    // console.log(vals)
-}
-
-function sortbubble(barr, sarr) {
-    var bubblearr = barr;
-    var SLIDER_ARRAY = sarr;
-
-    var u = container.selectAll(".bar")
-    .data(SLIDER_DATA)
-
-    //Take the new array and go through each array, comparing the values and swapping them
-
-
 
 
     // //Updates the bars with newly generated values
     // container
-    // .select('rect')
-    // .data(bubblearr)
-    // // .transition()
-    // // .duration(800)
-    // .attr('width', xScale.bandwidth())
-    // .attr('height', (data) => 600 - yScale(data.value))
-    // .attr('x', data => xScale(data.id))
-    // .attr('y', data => yScale(data.value))
-    // .attr("fill", "red");
-
-
-    // bubblearr[i] = {id: ids[i], value: vals[i]}
-
-
-    // //Updates the bars with newly generated values
-    // container
-    // .selectAll('rect')
+    // .selectAll('.bar')
     // .data(bubblearr)
     // .transition()
-    // .duration(500)
+    // .duration(800)
     // .attr('width', xScale.bandwidth())
     // .attr('height', (data) => 600 - yScale(data.value))
     // .attr('x', data => xScale(data.id))
     // .attr('y', data => yScale(data.value))
     // .attr("fill", "green");
 
+    // container
+    // .selectAll('.bar')
+    // .data(bubblearr)
+    // .exit()
+    // .remove()
+
+    d3.selectAll('.bar')
+        .each(function(d, i) {
+    var odd = i % 2 === 1;
+
+    d3.select(this)
+        .style('fill', odd ? 'orange' : '#ddd')
+  });
+
+    // console.log(bubblearr)
+
+    // // Print the sorted array
+    // console.log(vals)
 }
