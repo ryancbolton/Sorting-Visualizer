@@ -271,26 +271,37 @@ bubblesort.onclick = function() {
         for(var j = 0; j < (vals.length - i -1 ); j++){
             
             // Checking if the item at present iteration is greater than the next iteration
-            if(vals[j] > vals[j+1]){
+            if(SLIDER_DATA[j].value > SLIDER_DATA[j+1].value){
 
                 // If the condition is true then swap them
-                var temp = vals[j]
-                vals[j] = vals[j + 1]
-                vals[j+1] = temp
+                var temp = SLIDER_DATA[j].value
+                SLIDER_DATA[j].value = SLIDER_DATA[j + 1].value
+                SLIDER_DATA[j+1].value = temp
             }
+            //Updates the bars with newly generated values
+            container
+            .selectAll('.bar')
+            .data(SLIDER_DATA)
+            .transition()
+            .duration(800)
+            .attr('width', xScale.bandwidth())
+            .attr('height', (data) => 600 - yScale(data.value))
+            .attr('x', data => xScale(data.id))
+            .attr('y', data => yScale(data.value))
+            .attr("fill", "green");
             // bubblearr[i] = {id: ids[i], value: vals[i]}
         }
     }
 
-    //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
-    for (var i = 0; i < ids.length; i++)
-        bubblearr[i] = {id: ids[i], value: vals[i]}
+    // //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
+    // for (var i = 0; i < ids.length; i++)
+    //     bubblearr[i] = {id: ids[i], value: vals[i]}
 
 
     // //Updates the bars with newly generated values
     // container
     // .selectAll('.bar')
-    // .data(bubblearr)
+    // .data(SLIDER_DATA)
     // .transition()
     // .duration(800)
     // .attr('width', xScale.bandwidth())
@@ -301,17 +312,25 @@ bubblesort.onclick = function() {
 
     // container
     // .selectAll('.bar')
-    // .data(bubblearr)
+    // .data(SLIDER_DATA)
     // .exit()
     // .remove()
 
-    d3.selectAll('.bar')
-        .each(function(d, i) {
-    var odd = i % 2 === 1;
+    // d3.selectAll('.bar')
+    //     .data(bubblearr, function(d) {
+    //         return d;
+    //     })
+    //     .each(function(d) {
 
-    d3.select(this)
-        .style('fill', odd ? 'orange' : '#ddd')
-  });
+    //     d3.select(this)
+    //     .transition()
+    //     .duration(800)
+    //     .attr('width', xScale.bandwidth())
+    //     .attr('height', (data) => 600 - yScale(data.value))
+    //     .attr('x', data => xScale(data.id))
+    //     .attr('y', data => yScale(data.value))
+    //     .attr("fill", "green")
+    // });
 
     // console.log(bubblearr)
 
