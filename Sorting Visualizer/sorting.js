@@ -249,91 +249,168 @@ var SLIDER_DATA = update()
 // Grabs the "Bubble sort" button
 var bubblesort = document.getElementById("bubble-sort");
 
-bubblesort.onclick = function() {
-    var vals = []; //initializes array for slider array values
-    var ids = []; //initializes array for slider array ids
-    var bubblearr = []; //empty final array
+var count = 1 + 50,
+    durationTime = 2000/count,
+    array = d3.shuffle(d3.range(1,count)),
+    unsortedArray = [...array],
+    sortedArray = [],
+    stop = false,
+    steps = 0;
 
-    //Adds the values from the SLIDER_DATA array to the empty 'vals' array
-    for (var i = 0; i < SLIDER_DATA.length; i++) {
-        vals.push(SLIDER_DATA[i].value);
-    }
+function bubbleSort() {
 
-    //Adds the ids from the SLIDER_DATA array to the empty 'ids' array
-    for (var i = 0; i < SLIDER_DATA.length; i++) {
-        ids.push(SLIDER_DATA[i].id);
-    }
+        function sortPass(i) {
+            if (!unsortedArray.length || stop) return stop = false
 
-    //Bubble sort function (copied from https://www.geeksforgeeks.org/bubble-sort-algorithms-by-using-javascript/)
-    for(var i = 0; i < vals.length; i++){
-     
-        // Last i elements are already in place  
-        for(var j = 0; j < (vals.length - i -1 ); j++){
-            
-            // Checking if the item at present iteration is greater than the next iteration
-            if(SLIDER_DATA[j].value > SLIDER_DATA[j+1].value){
+            if (i<=unsortedArray.length) {
+                if (unsortedArray[i] < unsortedArray[i-1]) {
 
-                // If the condition is true then swap them
-                var temp = SLIDER_DATA[j].value
-                SLIDER_DATA[j].value = SLIDER_DATA[j + 1].value
-                SLIDER_DATA[j+1].value = temp
+                    d3.select("#rect" + unsortedArray[i]).attr("class", "testing")
+                    d3.select("#rect" + unsortedArray[i-1]).attr("class", "testing")
+                    
+                    d3.timeout(function() {
+                        d3.select("#rect" + unsortedArray[i]).attr("class", "")
+                        d3.select("#rect" + unsortedArray[i-1]).attr("class", "")                                            
+                    }, durationTime);
+
+                    var temp = unsortedArray[i-1];
+                    unsortedArray[i-1] = unsortedArray[i];
+                    unsortedArray[i] = temp;
+
+                    slide(unsortedArray[i], i + sortedArray);
+                    slide(unsortedArray[i-1], i-1 + sortedArray);
+
+                    d3.select("#counter").html(++steps);
+
+                    d3.timeout(function() {return sortPass(++i)}, durationTime);
+
+                } else if (i == unsortedArray.length) {
+
+                    for (n = i; n == unsortedArray[n-1]; n--) {
+                        d3.select("#text" + n).attr("class", "sorted")
+                        unsortedArray.pop();
+                    }              
+
+                    sortPass(++i);
+                } else {               
+                    sortPass(++i);
+                }
+
+            } else {
+                bubbleSort();
             }
-            //Updates the bars with newly generated values
-            container
-            .selectAll('.bar')
-            .data(SLIDER_DATA)
-            .transition()
-            .duration(800)
-            .attr('width', xScale.bandwidth())
-            .attr('height', (data) => 600 - yScale(data.value))
-            .attr('x', data => xScale(data.id))
-            .attr('y', data => yScale(data.value))
-            .attr("fill", "green");
-            // bubblearr[i] = {id: ids[i], value: vals[i]}
         }
-    }
-
-    // //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
-    // for (var i = 0; i < ids.length; i++)
-    //     bubblearr[i] = {id: ids[i], value: vals[i]}
+        sortPass(1);
 
 
-    // //Updates the bars with newly generated values
-    // container
-    // .selectAll('.bar')
-    // .data(SLIDER_DATA)
-    // .transition()
-    // .duration(800)
-    // .attr('width', xScale.bandwidth())
-    // .attr('height', (data) => 600 - yScale(data.value))
-    // .attr('x', data => xScale(data.id))
-    // .attr('y', data => yScale(data.value))
-    // .attr("fill", "green");
 
-    // container
-    // .selectAll('.bar')
-    // .data(SLIDER_DATA)
-    // .exit()
-    // .remove()
+//     var vals = []; //initializes array for slider array values
+//     var ids = []; //initializes array for slider array ids
+//     var bubblearr = []; //empty final array
 
-    // d3.selectAll('.bar')
-    //     .data(bubblearr, function(d) {
-    //         return d;
-    //     })
-    //     .each(function(d) {
+//     //Adds the values from the SLIDER_DATA array to the empty 'vals' array
+//     for (var i = 0; i < SLIDER_DATA.length; i++) {
+//         vals.push(SLIDER_DATA[i].value);
+//     }
 
-    //     d3.select(this)
-    //     .transition()
-    //     .duration(800)
-    //     .attr('width', xScale.bandwidth())
-    //     .attr('height', (data) => 600 - yScale(data.value))
-    //     .attr('x', data => xScale(data.id))
-    //     .attr('y', data => yScale(data.value))
-    //     .attr("fill", "green")
-    // });
+//     //Adds the ids from the SLIDER_DATA array to the empty 'ids' array
+//     for (var i = 0; i < SLIDER_DATA.length; i++) {
+//         ids.push(SLIDER_DATA[i].id);
+//     }
 
-    // console.log(bubblearr)
+//     console.log(SLIDER_DATA);
+//     console.log(vals);
+//     //Bubble sort function (copied from https://www.geeksforgeeks.org/bubble-sort-algorithms-by-using-javascript/)
+//     for(var i = 0; i < vals.length; i++){
+//         bubblearr[i] = {id: ids[i], value: vals[i]}
+     
+//         // Last i elements are already in place  
+//         for(var j = 0; j < (vals.length - i -1 ); j++){
+            
+//             // Checking if the item at present iteration is greater than the next iteration
+//             if(vals[j] > vals[j+1]){
 
-    // // Print the sorted array
-    // console.log(vals)
+//                 // If the condition is true then swap them
+//                 var temp = vals[j]
+//                 vals[j] = vals[j + 1]
+//                 vals[j+1] = temp
+//             }
+//         }
+
+//         console.log(vals);
+
+//         // //Updates the bars with newly generated values
+//         // container
+//         // .selectAll('.bar')
+//         // .data(bubblearr)
+//         // .transition()
+//         // .duration(800)
+//         // .attr('width', xScale.bandwidth())
+//         // .attr('height', (data) => 600 - yScale(data.value))
+//         // .attr('x', data => xScale(data.id))
+//         // .attr('y', data => yScale(data.value))
+//         // .attr("fill", "green");
+//     }
+
+//     //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
+//     for (var i = 0; i < ids.length; i++)
+//         bubblearr[i] = {id: ids[i], value: vals[i]}
+
+// //     d3.selectAll('rect')
+// //   .each(function(d, i) {
+// //     var odd = i % 2 === 1;
+
+// //     d3.select(this)
+// //       .style('fill', odd ? 'orange' : '#ddd')
+// //     });
+
+
+//     //Updates the bars with newly generated values
+//     container
+//     .selectAll('.bar')
+//     .data(bubblearr)
+//     .transition()
+//     .duration(800)
+//     .attr('width', xScale.bandwidth())
+//     .attr('height', (data) => 600 - yScale(data.value))
+//     .attr('x', data => xScale(data.id))
+//     .attr('y', data => yScale(data.value))
+//     .attr("fill", "green");
+
+//     container
+//     .selectAll('.bar')
+//     .data(SLIDER_DATA)
+//     .exit()
+//     .remove()
+
+//     // d3.selectAll('.bar')
+//     //     .data(bubblearr, function(d) {
+//     //         return d;
+//     //     })
+//     //     .each(function(d) {
+
+//     //     d3.select(this)
+//     //     .transition()
+//     //     .duration(800)
+//     //     .attr('width', xScale.bandwidth())
+//     //     .attr('height', (data) => 600 - yScale(data.value))
+//     //     .attr('x', data => xScale(data.id))
+//     //     .attr('y', data => yScale(data.value))
+//     //     .attr("fill", "green")
+//     // });
+
+//     // console.log(bubblearr)
+
+//     // // Print the sorted array
+//     // console.log(vals)
+}
+
+function slide(d, i) {
+    d3.select("#text" + d)
+        .transition().duration(durationTime)
+        .attr("transform", function(d) {return "translate(" + (x(i)) + ", 0)"})
+
+    d3.select("#rect" + d)
+        .transition().duration(durationTime)
+        .attr("transform", function(d) {return "translate(" + (x(i-1)) + ", 0)"})                
 }
