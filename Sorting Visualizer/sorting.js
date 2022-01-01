@@ -104,50 +104,6 @@ const DUMMY_DATA = [
 
 console.log(DUMMY_DATA)
 
-var count = 1 + 50,
-    durationTime = 2000/count,
-    array = d3.shuffle(d3.range(1,count)),
-    unsortedArray = [...array],
-    sortedArray = [],
-    stop = false,
-    steps = 0,
-    bogoShuffles = 0;
-    
-var margin = {top: 40, right: 0, bottom: 180, left: 0},
-    width = 960 - margin.left - margin.right,
-    height = 5000 - margin.top - margin.bottom;
-
-var barWidth = width/count;
-
-var x = d3.scaleLinear()
-    .domain([0,count])
-    .range([0, width]);
-
-var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-    
-var rects = svg.append("g")
-    .attr("transform", "translate(" + barWidth + ",2)")
-    .selectAll("rect")
-    .data(unsortedArray)
-    .enter().append("rect")
-
-var labels = svg.selectAll("text")
-    .data(unsortedArray)
-    .enter().append("text")
-    
-labels.attr("id", function(d) {return "text" + d})
-    .attr("transform", function(d, i) {return "translate(" + x(i) + ",0)"})
-    .html(function(d) {return d;})
-
-rects.attr("id", function(d) {return "rect" + d})
-    .attr("transform", function(d, i) {return "translate(" + (x(i) - barWidth) + ",0)"})
-    .attr("width", barWidth *.9)
-    .attr("height", function(d) {return d*barWidth/3})
-
 var xScale = d3
 .scaleBand() //Gives all bars/items the same width
 .domain(DUMMY_DATA.map((dataPoint) => dataPoint.id)) //Tells scaleBand() how many data points there are based on the number of ids
@@ -295,51 +251,6 @@ var SLIDER_DATA = update()
 
 function bubbleSort() {
 
-        function sortPass(i) {
-            if (!unsortedArray.length || stop) return stop = false
-
-            if (i<=unsortedArray.length) {
-                if (unsortedArray[i] < unsortedArray[i-1]) {
-
-                    d3.select("#rect" + unsortedArray[i]).attr("class", "testing")
-                    d3.select("#rect" + unsortedArray[i-1]).attr("class", "testing")
-                    
-                    d3.timeout(function() {
-                        d3.select("#rect" + unsortedArray[i]).attr("class", "")
-                        d3.select("#rect" + unsortedArray[i-1]).attr("class", "")                                            
-                    }, durationTime);
-
-                    var temp = unsortedArray[i-1];
-                    unsortedArray[i-1] = unsortedArray[i];
-                    unsortedArray[i] = temp;
-
-                    slide(unsortedArray[i], i + sortedArray);
-                    slide(unsortedArray[i-1], i-1 + sortedArray);
-
-                    d3.select("#counter").html(++steps);
-
-                    d3.timeout(function() {return sortPass(++i)}, durationTime);
-
-                } else if (i == unsortedArray.length) {
-
-                    for (n = i; n == unsortedArray[n-1]; n--) {
-                        d3.select("#text" + n).attr("class", "sorted")
-                        unsortedArray.pop();
-                    }              
-
-                    sortPass(++i);
-                } else {               
-                    sortPass(++i);
-                }
-
-            } else {
-                bubbleSort();
-            }
-        }
-        sortPass(1);
-
-
-
     var vals = []; //initializes array for slider array values
     var ids = []; //initializes array for slider array ids
     var bubblearr = []; //empty final array
@@ -357,56 +268,9 @@ function bubbleSort() {
     console.log(SLIDER_DATA);
     console.log(vals);
 
-    function sortPass(i) {
-        if (!unsortedArray.length || stop) return stop = false
-
-        if (i<=unsortedArray.length) {
-            if (unsortedArray[i] < unsortedArray[i-1]) {
-
-                d3.select("#rect" + unsortedArray[i]).attr("class", "testing")
-                d3.select("#rect" + unsortedArray[i-1]).attr("class", "testing")
-                
-                d3.timeout(function() {
-                    d3.select("#rect" + unsortedArray[i]).attr("class", "")
-                    d3.select("#rect" + unsortedArray[i-1]).attr("class", "")                                            
-                }, durationTime);
-
-                var temp = unsortedArray[i-1];
-                unsortedArray[i-1] = unsortedArray[i];
-                unsortedArray[i] = temp;
-
-                slide(unsortedArray[i], i + sortedArray);
-                slide(unsortedArray[i-1], i-1 + sortedArray);
-
-                d3.select("#counter").html(++steps);
-
-                d3.timeout(function() {return sortPass(++i)}, durationTime);
-
-            } else if (i == unsortedArray.length) {
-
-                for (n = i; n == unsortedArray[n-1]; n--) {
-                    d3.select("#text" + n).attr("class", "sorted")
-                    unsortedArray.pop();
-                }              
-
-                sortPass(++i);
-            } 
-            else {               
-                sortPass(++i);
-            }
-
-        } 
-        else {
-            bubbleSort();
-        }
-    }
-    sortPass(1);
-
-    function sortpass(i) {
-
     //Bubble sort function (copied from https://www.geeksforgeeks.org/bubble-sort-algorithms-by-using-javascript/)
     for(var i = 0; i < vals.length; i++){
-        bubblearr[i] = {id: ids[i], value: vals[i]}
+        // bubblearr[i] = {id: ids[i], value: vals[i]}
      
         // Last i elements are already in place  
         for(var j = 0; j < (vals.length - i -1 ); j++){
@@ -418,55 +282,61 @@ function bubbleSort() {
                 var temp = vals[j]
                 vals[j] = vals[j + 1]
                 vals[j+1] = temp
-            } else if (i == vals.length) {
-
-                for (n = i; n == vals[n-1]; n--) {
-                    d3.select("#text" + n).attr("class", "sorted")
-                    vals.pop();
-                }              
-
-                sortPass(++i);
-            } 
-            else {               
-                sortPass(++i);
             }
         }
 
-        // console.log(vals);
+        console.log(vals);
     }
-    bubbleSort();
-}
-sortpass(1);
 
     //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
     for (var i = 0; i < ids.length; i++)
         bubblearr[i] = {id: ids[i], value: vals[i]}
 
-    //Updates the bars with newly generated values
-    container
-    .selectAll('.bar')
+    // //Updates the bars with newly generated values
+    // container
+    // .selectAll('.bar')
+    // .data(bubblearr)
+    // .transition()
+    // .duration(800)
+    // .attr('width', xScale.bandwidth())
+    // .attr('height', (data) => 600 - yScale(data.value))
+    // .attr('x', data => xScale(data.id))
+    // .attr('y', data => yScale(data.value))
+    // .attr("fill", "green");
+
+    // d3.selectAll('rect')
+    // .each(function(d, i) {
+    // var swap = i > i+1;
+
+    // d3.select(this)
+    //   .style('fill', swap ? 'orange' : '#ddd')
+    //   .attr("transform", "translate(" + xScale.bandwidth() + ",2)")
+    //   .selectAll("rect")
+    //   .data(bubblearr)
+    //   .enter().append("rect")
+    // });
+    
+    container.select('rect')
+    .attr("transform", "translate(" + xScale.bandwidth() + ",0)")
+    .selectAll("rect")
     .data(bubblearr)
-    .transition()
-    .duration(800)
-    .attr('width', xScale.bandwidth())
-    .attr('height', (data) => 600 - yScale(data.value))
-    .attr('x', data => xScale(data.id))
-    .attr('y', data => yScale(data.value))
-    .attr("fill", "green");
+    .enter().append("rect")
 
     container
     .selectAll('.bar')
-    .data(SLIDER_DATA)
+    .data(bubblearr)
     .exit()
     .remove()
 }
 
-function slide(d, i) {
-    d3.select("#text" + d)
-        .transition().duration(durationTime)
-        .attr("transform", function(d) {return "translate(" + (x(i)) + ", 0)"})
+// d3.select('g').remove().exit()
 
-    d3.select("#rect" + d)
-        .transition().duration(durationTime)
-        .attr("transform", function(d) {return "translate(" + (x(i-1)) + ", 0)"})                
-}
+// function slide(d, i) {
+//     d3.select("#text" + d)
+//         .transition().duration(durationTime)
+//         .attr("transform", function(d) {return "translate(" + (x(i)) + ", 0)"})
+
+//     d3.select("#rect" + d)
+//         .transition().duration(durationTime)
+//         .attr("transform", function(d) {return "translate(" + (x(i-1)) + ", 0)"})                
+// }
