@@ -270,7 +270,7 @@ function bubbleSort() {
 
     //Bubble sort function (copied from https://www.geeksforgeeks.org/bubble-sort-algorithms-by-using-javascript/)
     for(var i = 0; i < vals.length; i++){
-        // bubblearr[i] = {id: ids[i], value: vals[i]}
+        bubblearr[i] = {id: ids[i], value: vals[i]}
      
         // Last i elements are already in place  
         for(var j = 0; j < (vals.length - i -1 ); j++){
@@ -279,18 +279,39 @@ function bubbleSort() {
             if(vals[j] > vals[j+1]){
 
                 // If the condition is true then swap them
-                var temp = vals[j]
-                vals[j] = vals[j + 1]
-                vals[j+1] = temp
+                var temp = SLIDER_DATA[j].value
+                SLIDER_DATA[j].value = SLIDER_DATA[j + 1].value
+                SLIDER_DATA[j+1].value = temp
+
+                updated(SLIDER_DATA);
             }
         }
-
         console.log(vals);
+        console.log(SLIDER_DATA);
     }
 
-    //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
-    for (var i = 0; i < ids.length; i++)
-        bubblearr[i] = {id: ids[i], value: vals[i]}
+    function updated(sales) {
+        container.selectAll('rect')
+        .data(sales, (d, i) => d.id)
+        .join(
+            enter => {
+                enter.append('rect')
+                .attr('width', xScale.bandwidth())
+                .attr('height', (data) => 600 - yScale(data.value))
+                .attr('x', data => xScale(data.id))
+                .attr('y', data => yScale(data.value))
+            },
+            updated => {
+                // NEW!
+                updated.transition().duration(1000)
+                .attr('width', xScale.bandwidth());
+            },
+        );
+    };
+
+    // //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
+    // for (var i = 0; i < ids.length; i++)
+    //     bubblearr[i] = {id: ids[i], value: vals[i]}
 
     // //Updates the bars with newly generated values
     // container
@@ -304,39 +325,9 @@ function bubbleSort() {
     // .attr('y', data => yScale(data.value))
     // .attr("fill", "green");
 
-    // d3.selectAll('rect')
-    // .each(function(d, i) {
-    // var swap = i > i+1;
-
-    // d3.select(this)
-    //   .style('fill', swap ? 'orange' : '#ddd')
-    //   .attr("transform", "translate(" + xScale.bandwidth() + ",2)")
-    //   .selectAll("rect")
-    //   .data(bubblearr)
-    //   .enter().append("rect")
-    // });
-    
-    container.select('rect')
-    .attr("transform", "translate(" + xScale.bandwidth() + ",0)")
-    .selectAll("rect")
-    .data(bubblearr)
-    .enter().append("rect")
-
-    container
-    .selectAll('.bar')
-    .data(bubblearr)
-    .exit()
-    .remove()
+    // container
+    // .selectAll('.bar')
+    // .data(bubblearr)
+    // .exit()
+    // .remove()
 }
-
-// d3.select('g').remove().exit()
-
-// function slide(d, i) {
-//     d3.select("#text" + d)
-//         .transition().duration(durationTime)
-//         .attr("transform", function(d) {return "translate(" + (x(i)) + ", 0)"})
-
-//     d3.select("#rect" + d)
-//         .transition().duration(durationTime)
-//         .attr("transform", function(d) {return "translate(" + (x(i-1)) + ", 0)"})                
-// }
