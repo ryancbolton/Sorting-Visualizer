@@ -270,7 +270,7 @@ function bubbleSort() {
 
     //Bubble sort function (copied from https://www.geeksforgeeks.org/bubble-sort-algorithms-by-using-javascript/)
     for(var i = 0; i < vals.length; i++){
-        bubblearr[i] = {id: ids[i], value: vals[i]}
+        // bubblearr[i] = {id: ids[i], value: vals[i]}
      
         // Last i elements are already in place  
         for(var j = 0; j < (vals.length - i -1 ); j++){
@@ -279,15 +279,17 @@ function bubbleSort() {
             if(vals[j] > vals[j+1]){
 
                 // If the condition is true then swap them
-                var temp = SLIDER_DATA[j].value
-                SLIDER_DATA[j].value = SLIDER_DATA[j + 1].value
-                SLIDER_DATA[j+1].value = temp
+                var temp = vals[j]
+                vals[j] = vals[j + 1]
+                vals[j+1] = temp
 
-                updated(SLIDER_DATA);
+                updated(bubblearr);
             }
         }
         console.log(vals);
-        console.log(SLIDER_DATA);
+        console.log(bubblearr);
+        // updated(bubblearr);
+        bubblearr[i] = {id: ids[i], value: vals[i]}
     }
 
     function updated(sales) {
