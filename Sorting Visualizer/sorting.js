@@ -117,16 +117,45 @@ const yScale = d3
 const container = d3.select('svg')
     .classed('container', true);
 
-const bars = container
-    .selectAll('.bar')
-    .data(DUMMY_DATA)
-    .enter()
-    .append('rect')
-    .classed('bar', true)
-    .attr('width', xScale.bandwidth()) //Takes available width and divides by the number of data points (ids) to give equal widths
-    .attr('height', (data) => 600 - yScale(data.value))
-    .attr('x', data => xScale(data.id))
-    .attr('y', data => yScale(data.value))
+// const bars = container
+//     .selectAll('.bar')
+//     .data(DUMMY_DATA)
+//     .enter()
+//     .append('rect')
+//     .classed('bar', true)
+//     .attr('width', xScale.bandwidth()) //Takes available width and divides by the number of data points (ids) to give equal widths
+//     .attr('height', (data) => 600 - yScale(data.value))
+//     .attr('x', data => xScale(data.id))
+//     .attr('y', data => yScale(data.value))
+
+function updated(sales) {
+    container.selectAll('.bar')
+    .data(sales, (d, i) => d.id)
+    .join(
+        enter => {
+            enter.append('rect')
+            .classed('bar', true)
+            .attr('width', xScale.bandwidth())
+            .attr('height', (data) => 600 - yScale(data.value))
+            .attr('x', data => xScale(data.id))
+            .attr('y', data => yScale(data.value))
+            .attr("fill", "#720570");
+        },
+        updated => {
+            // NEW!
+            updated.transition().duration(1000)
+            .attr('width', xScale.bandwidth());
+        },
+        // exit => {
+        //     // NEW!
+        //     exit
+        //     .exit()
+        //     .remove()
+        // },
+    );
+};
+
+// updated(DUMMY_DATA);
 
 
 /////////////////////////////////////////////   Generate button functions    ///////////////////////////////////////////////////////
@@ -148,27 +177,30 @@ newarr.onclick = function() {
         }
     });
 
-    //Updates the bars with newly generated values
-    container
-    .selectAll('.bar')
-    .data(DUMMY_DATA)
-    .transition()
-    .attr('width', xScale.bandwidth())
-    .attr('height', (data) => 600 - yScale(data.value))
-    .attr('x', data => xScale(data.id))
-    .attr('y', data => yScale(data.value))
-    .attr("fill", "#720570");
+    // //Updates the bars with newly generated values
+    // container
+    // .selectAll('.bar')
+    // .data(DUMMY_DATA)
+    // .transition()
+    // .attr('width', xScale.bandwidth())
+    // .attr('height', (data) => 600 - yScale(data.value))
+    // .attr('x', data => xScale(data.id))
+    // .attr('y', data => yScale(data.value))
+    // .attr("fill", "#720570");
 
-    //Log object to console again.
-    for (objIndex in DUMMY_DATA) {
-        console.log("After update: ", DUMMY_DATA[objIndex])
-    }
+    // //Log object to console again.
+    // for (objIndex in DUMMY_DATA) {
+    //     console.log("After update: ", DUMMY_DATA[objIndex])
+    // }
 
-    container
-    .selectAll('.bar')
-    .data(DUMMY_DATA)
-    .exit()
-    .remove()
+    // container
+    // .selectAll('.bar')
+    // .data(DUMMY_DATA)
+    // .exit()
+    // .remove()
+
+    updated(DUMMY_DATA)
+    
 };
 
 
@@ -291,25 +323,6 @@ function bubbleSort() {
         // updated(bubblearr);
         bubblearr[i] = {id: ids[i], value: vals[i]}
     }
-
-    function updated(sales) {
-        container.selectAll('rect')
-        .data(sales, (d, i) => d.id)
-        .join(
-            enter => {
-                enter.append('rect')
-                .attr('width', xScale.bandwidth())
-                .attr('height', (data) => 600 - yScale(data.value))
-                .attr('x', data => xScale(data.id))
-                .attr('y', data => yScale(data.value))
-            },
-            updated => {
-                // NEW!
-                updated.transition().duration(1000)
-                .attr('width', xScale.bandwidth());
-            },
-        );
-    };
 
     // //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
     // for (var i = 0; i < ids.length; i++)
