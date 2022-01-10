@@ -114,21 +114,21 @@ const yScale = d3
 const container = d3.select('svg')
     .classed('container', true);
 
-// const bars = container
-//     .selectAll('.bar')
-//     .data(DUMMY_DATA)
-//     .enter()
-//     .append('rect')
-//     .classed('bar', true)
-//     .attr('width', xScale.bandwidth()) //Takes available width and divides by the number of data points (ids) to give equal widths
-//     .attr('height', (data) => 600 - yScale(data.value))
-//     .attr('x', data => xScale(data.id))
-//     .attr('y', data => yScale(data.value))
+const bars = container
+    .selectAll('.bar')
+    .data(DUMMY_DATA)
+    .enter()
+    .append('rect')
+    .classed('bar', true)
+    .attr('width', xScale.bandwidth()) //Takes available width and divides by the number of data points (ids) to give equal widths
+    .attr('height', (data) => 600 - yScale(data.value))
+    .attr('x', data => xScale(data.id))
+    .attr('y', data => yScale(data.value))
 
 /////////////////////////////////////////////  Update function    ///////////////////////////////////////////////////////
-function update(arr) {
+function draw() {
     container.selectAll('rect')
-    .data(arr, (d, i) => d.id)
+    .data(DUMMY_DATA, d => d.id)
     .join(
         enter => {
             enter.append('rect')
@@ -139,16 +139,18 @@ function update(arr) {
             .attr("fill", "#720570");
         },
         update => {
-            update.transition().duration(1000).attr('width', xScale.bandwidth())
+            update.transition().duration(1000).attr('fill', 'red')
         },
         exit => {
-            exit.attr('fill', 'red').call(exit => exit.transition().remove())
+            exit
+            .remove()
         }
     );
 }
 
 /////////////////////////////////////////////   Generate button functions    ///////////////////////////////////////////////////////
 function GenerateArr () {
+    
     //Log object to Console.
     for (objIndex in DUMMY_DATA) {
         console.log("Before update: ", DUMMY_DATA[objIndex])
@@ -166,5 +168,22 @@ function GenerateArr () {
         console.log("After update: ", DUMMY_DATA[objIndex])
     }
 
-    update(DUMMY_DATA);
+    //Updates the bars with newly generated values
+    container
+    .selectAll('.bar')
+    .data(DUMMY_DATA)
+    .transition()
+    .attr('width', xScale.bandwidth())
+    .attr('height', (data) => 600 - yScale(data.value))
+    .attr('x', data => xScale(data.id))
+    .attr('y', data => yScale(data.value))
+    .attr("fill", "#720570");
+
+    container
+    .selectAll('.bar')
+    .data(DUMMY_DATA)
+    .exit()
+    .remove()
+
+    draw(DUMMY_DATA);
 }

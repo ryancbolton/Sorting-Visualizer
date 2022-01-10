@@ -128,32 +128,32 @@ const container = d3.select('svg')
 //     .attr('x', data => xScale(data.id))
 //     .attr('y', data => yScale(data.value))
 
-function updated(sales) {
-    container.selectAll('.bar')
-    .data(sales, (d, i) => d.id)
-    .join(
-        enter => {
-            enter.append('rect')
-            .classed('bar', true)
-            .attr('width', xScale.bandwidth())
-            .attr('height', (data) => 600 - yScale(data.value))
-            .attr('x', data => xScale(data.id))
-            .attr('y', data => yScale(data.value))
-            .attr("fill", "#720570");
-        },
-        updated => {
-            // NEW!
-            updated.transition().duration(1000)
-            .attr('width', xScale.bandwidth());
-        },
-        // exit => {
-        //     // NEW!
-        //     exit
-        //     .exit()
-        //     .remove()
-        // },
-    );
-};
+// function updated(sales) {
+//     container.selectAll('.bar')
+//     .data(sales, (d, i) => d.id)
+//     .join(
+//         enter => {
+//             enter.append('rect')
+//             .classed('bar', true)
+//             .attr('width', xScale.bandwidth())
+//             .attr('height', (data) => 600 - yScale(data.value))
+//             .attr('x', data => xScale(data.id))
+//             .attr('y', data => yScale(data.value))
+//             .attr("fill", "#720570");
+//         },
+//         updated => {
+//             // NEW!
+//             updated.transition().duration(1000)
+//             .attr('width', xScale.bandwidth());
+//         },
+//         // exit => {
+//         //     // NEW!
+//         //     exit
+//         //     .exit()
+//         //     .remove()
+//         // },
+//     );
+// };
 
 // updated(DUMMY_DATA);
 
@@ -177,29 +177,29 @@ newarr.onclick = function() {
         }
     });
 
-    // //Updates the bars with newly generated values
-    // container
-    // .selectAll('.bar')
-    // .data(DUMMY_DATA)
-    // .transition()
-    // .attr('width', xScale.bandwidth())
-    // .attr('height', (data) => 600 - yScale(data.value))
-    // .attr('x', data => xScale(data.id))
-    // .attr('y', data => yScale(data.value))
-    // .attr("fill", "#720570");
+     //Log object to console again.
+     for (objIndex in DUMMY_DATA) {
+        console.log("After update: ", DUMMY_DATA[objIndex])
+    }
 
-    // //Log object to console again.
-    // for (objIndex in DUMMY_DATA) {
-    //     console.log("After update: ", DUMMY_DATA[objIndex])
-    // }
+    //Updates the bars with newly generated values
+    container
+    .selectAll('.bar')
+    .data(DUMMY_DATA)
+    .transition()
+    .attr('width', xScale.bandwidth())
+    .attr('height', (data) => 600 - yScale(data.value))
+    .attr('x', data => xScale(data.id))
+    .attr('y', data => yScale(data.value))
+    .attr("fill", "#720570");
 
-    // container
-    // .selectAll('.bar')
-    // .data(DUMMY_DATA)
-    // .exit()
-    // .remove()
+    container
+    .selectAll('.bar')
+    .data(DUMMY_DATA)
+    .exit()
+    .remove()
 
-    updated(DUMMY_DATA)
+    // updated(DUMMY_DATA)
     
 };
 
@@ -311,22 +311,24 @@ function bubbleSort() {
             if(vals[j] > vals[j+1]){
 
                 // If the condition is true then swap them
-                var temp = vals[j]
-                vals[j] = vals[j + 1]
-                vals[j+1] = temp
+                var temp = SLIDER_DATA[j].value
+                SLIDER_DATA[j].value = SLIDER_DATA[j + 1].value
+                SLIDER_DATA[j+1].value = temp
 
-                updated(bubblearr);
+                // updated(bubblearr);
+                draw(SLIDER_DATA)
             }
         }
         console.log(vals);
         console.log(bubblearr);
         // updated(bubblearr);
         bubblearr[i] = {id: ids[i], value: vals[i]}
+        // draw(SLIDER_DATA)
     }
 
-    // //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
-    // for (var i = 0; i < ids.length; i++)
-    //     bubblearr[i] = {id: ids[i], value: vals[i]}
+    //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
+    for (var i = 0; i < ids.length; i++)
+        bubblearr[i] = {id: ids[i], value: vals[i]}
 
     // //Updates the bars with newly generated values
     // container
@@ -345,4 +347,28 @@ function bubbleSort() {
     // .data(bubblearr)
     // .exit()
     // .remove()
+
+    // draw(bubblearr)
+}
+
+
+
+function draw(arr) {
+    //Updates the bars with newly generated values
+    container
+    .selectAll('.bar')
+    .data(arr)
+    .transition()
+    .duration(800)
+    .attr('width', xScale.bandwidth())
+    .attr('height', (data) => 600 - yScale(data.value))
+    .attr('x', data => xScale(data.id))
+    .attr('y', data => yScale(data.value))
+    .attr("fill", "green");
+
+    container
+    .selectAll('.bar')
+    .data(arr)
+    .exit()
+    .remove()
 }
