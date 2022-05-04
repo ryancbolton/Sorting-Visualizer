@@ -117,46 +117,6 @@ const yScale = d3
 const container = d3.select('svg')
     .classed('container', true);
 
-// const bars = container
-//     .selectAll('.bar')
-//     .data(DUMMY_DATA)
-//     .enter()
-//     .append('rect')
-//     .classed('bar', true)
-//     .attr('width', xScale.bandwidth()) //Takes available width and divides by the number of data points (ids) to give equal widths
-//     .attr('height', (data) => 600 - yScale(data.value))
-//     .attr('x', data => xScale(data.id))
-//     .attr('y', data => yScale(data.value))
-
-// function updated(sales) {
-//     container.selectAll('.bar')
-//     .data(sales, (d, i) => d.id)
-//     .join(
-//         enter => {
-//             enter.append('rect')
-//             .classed('bar', true)
-//             .attr('width', xScale.bandwidth())
-//             .attr('height', (data) => 600 - yScale(data.value))
-//             .attr('x', data => xScale(data.id))
-//             .attr('y', data => yScale(data.value))
-//             .attr("fill", "#720570");
-//         },
-//         updated => {
-//             // NEW!
-//             updated.transition().duration(1000)
-//             .attr('width', xScale.bandwidth());
-//         },
-//         // exit => {
-//         //     // NEW!
-//         //     exit
-//         //     .exit()
-//         //     .remove()
-//         // },
-//     );
-// };
-
-// updated(DUMMY_DATA);
-
 
 /////////////////////////////////////////////   Generate button functions    ///////////////////////////////////////////////////////
 // Grabs the "Generate Array" button
@@ -198,8 +158,6 @@ newarr.onclick = function() {
     .data(DUMMY_DATA)
     .exit()
     .remove()
-
-    // updated(DUMMY_DATA)
     
 };
 
@@ -298,7 +256,7 @@ function bubbleSort() {
     }
 
     console.log(SLIDER_DATA);
-    console.log(vals);
+    console.log(vals); //these are all unsorted (plain values from the SLIDER_DATA array)
 
     //Bubble sort function (copied from https://www.geeksforgeeks.org/bubble-sort-algorithms-by-using-javascript/)
     for(var i = 0; i < vals.length; i++){
@@ -311,24 +269,53 @@ function bubbleSort() {
             if(vals[j] > vals[j+1]){
 
                 // If the condition is true then swap them
-                var temp = SLIDER_DATA[j].value
-                SLIDER_DATA[j].value = SLIDER_DATA[j + 1].value
-                SLIDER_DATA[j+1].value = temp
+                var temp = vals[j]
+                vals[j] = vals[j + 1]
+                vals[j+1] = temp
+                bubblearr[i] = {id: ids[i], value: vals[i]}
 
-                // updated(bubblearr);
-                draw(SLIDER_DATA)
+                /////////////////////// Need to add code here to update the graph everytime the vals array is sorted ///////////////////
+
+                /////////////////////////////// Removal and replacement method ////////////////////////////////////////////////////////
+                // container.selectAll(".bar").remove()
+
+                // container.selectAll(".bar")
+                // .data(bubblearr)
+                // .enter()
+                // .append("rect")
+                // .attr('width', xScale.bandwidth())
+                // .attr('height', (data) => 600 - yScale(data.value))
+                // .attr('x', data => xScale(data.id))
+                // .attr('y', data => yScale(data.value))
+                // .attr("fill", "green");
+
+                ///////////////////////////// Traditional way of updating the values ///////////////////////////////////////////////////
+                // var circleUpdate = container.selectAll(".bar")
+                // .data(bubblearr)
+
+                // circleUpdate.enter().append("rect")
+                // .attr('width', xScale.bandwidth())
+                // .attr('height', (data) => 600 - yScale(data.value))
+                // .attr('x', data => xScale(data.id))
+                // .attr('y', data => yScale(data.value))
+                // .attr("fill", "green");
+
+                // circleUpdate.exit().remove()
+
+                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             }
         }
-        console.log(vals);
-        console.log(bubblearr);
-        // updated(bubblearr);
-        bubblearr[i] = {id: ids[i], value: vals[i]}
-        // draw(SLIDER_DATA)
-    }
 
-    //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
-    for (var i = 0; i < ids.length; i++)
-        bubblearr[i] = {id: ids[i], value: vals[i]}
+        // console.log(vals);
+        // console.log(bubblearr);
+        // bubblearr[i] = {id: ids[i], value: vals[i]}
+    }
+    console.log(vals); //these are sorted
+    
+
+    // //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
+    // for (var i = 0; i < ids.length; i++)
+    //     bubblearr[i] = {id: ids[i], value: vals[i]}
 
     // //Updates the bars with newly generated values
     // container
@@ -347,28 +334,5 @@ function bubbleSort() {
     // .data(bubblearr)
     // .exit()
     // .remove()
-
-    // draw(bubblearr)
 }
 
-
-
-function draw(arr) {
-    //Updates the bars with newly generated values
-    container
-    .selectAll('.bar')
-    .data(arr)
-    .transition()
-    .duration(800)
-    .attr('width', xScale.bandwidth())
-    .attr('height', (data) => 600 - yScale(data.value))
-    .attr('x', data => xScale(data.id))
-    .attr('y', data => yScale(data.value))
-    .attr("fill", "green");
-
-    container
-    .selectAll('.bar')
-    .data(arr)
-    .exit()
-    .remove()
-}
