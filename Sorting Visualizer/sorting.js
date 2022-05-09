@@ -266,33 +266,39 @@ function bubbleSort() {
         for(var j = 0; j < (vals.length - i -1 ); j++){
             
             // Checking if the item at present iteration is greater than the next iteration
-            if(vals[j] > vals[j+1]){
+            if(SLIDER_DATA[j].value > SLIDER_DATA[j+1].value){    //Was vals[j] and vals[j+1]
 
                 ///////////////// Bubblearr version  ///////////////////////
                 // If the condition is true then swap them
-                var temp = vals[j]
-                vals[j] = vals[j + 1]
-                vals[j+1] = temp
+                // var temp = vals[j]
+                // vals[j] = vals[j + 1]
+                // vals[j+1] = temp
 
-                // ///////////////////////// Slider Data Array Version  /////////////////////////
-                // // If the condition is true then swap them
-                // var temp = SLIDER_DATA[j].value
-                // SLIDER_DATA[j].value = SLIDER_DATA[j + 1].value
-                // SLIDER_DATA[j+1].value = temp
+                ///////////////////////// Slider Data Array Version  /////////////////////////
+                // If the condition is true then swap them
+                var temp = SLIDER_DATA[j].value
+                SLIDER_DATA[j].value = SLIDER_DATA[j + 1].value
+                SLIDER_DATA[j+1].value = temp
 
-                bubblearr[i] = {id: ids[i], value: vals[i]}
+                draw(SLIDER_DATA)
 
-                console.log(bubblearr)
+                // //Updates the bars with newly generated values
+                // container
+                // .selectAll('.bar')
+                // .data(SLIDER_DATA)
+                // .transition()
+                // .duration(800)
+                // .attr('width', xScale.bandwidth())
+                // .attr('height', (data) => 600 - yScale(data.value))
+                // .attr('x', data => xScale(data.id))
+                // .attr('y', data => yScale(data.value))
+                // .attr("fill", "green");
 
-                container.selectAll('.bar')
-                .data(bubblearr)
-                .transition()
-                .delay(1000)   
-                .attr('width', xScale.bandwidth())
-                .attr('height', (data) => 600 - yScale(data.value))
-                .attr('x', data => xScale(data.id))
-                .attr('y', data => yScale(data.value))
-                .attr("fill", "green");
+                // container
+                // .selectAll('.bar')
+                // .data(SLIDER_DATA)
+                // .exit()
+                // .remove()
 
                 /////////////////////// Need to add code here to update the graph everytime the vals array is sorted ///////////////////
 
@@ -324,35 +330,13 @@ function bubbleSort() {
 
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             }
-            else {
-                bubblearr[i] = {id: ids[i], value: vals[i]}
-
-                console.log(bubblearr)
-
-                container.selectAll('.bar')
-                .data(bubblearr)
-                .transition()
-                .delay(1000)   
-                .attr('width', xScale.bandwidth())
-                .attr('height', (data) => 600 - yScale(data.value))
-                .attr('x', data => xScale(data.id))
-                .attr('y', data => yScale(data.value))
-                .attr("fill", "green");
-            }
-            // bubblearr[i] = {id: ids[i], value: vals[i]}
         }
-        // bubblearr[i] = {id: ids[i], value: vals[i]}
-
-        // console.log(vals);
-        // console.log(bubblearr);
-        // bubblearr[i] = {id: ids[i], value: vals[i]}
     }
-    // bubblearr[i] = {id: ids[i], value: vals[i]}
     console.log(vals); //these are sorted
+    console.log(SLIDER_DATA);
     
-
-    // ///////////////////////////// Original code that updates the final graph and displays them sorted and green /////////////////////
-    // //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
+    ///////////////////////////// Original code that updates the final graph and displays them sorted and green /////////////////////
+    //Pairs each integer in the 'vals' array with an id in the 'ids' array and adds these objects to the 'bubblearr' array
     // for (var i = 0; i < ids.length; i++)
     //     bubblearr[i] = {id: ids[i], value: vals[i]}
 
@@ -371,6 +355,26 @@ function bubbleSort() {
     // container
     // .selectAll('.bar')
     // .data(bubblearr)
+    // .exit()
+    // .remove()
+}
+
+function draw(arr) {
+    //Updates the bars with newly generated values
+    container
+    .selectAll('.bar')
+    .data(arr)
+    .transition()
+    .duration(800)
+    .attr('width', xScale.bandwidth())
+    .attr('height', (data) => 600 - yScale(data.value))
+    .attr('x', data => xScale(data.id))
+    .attr('y', data => yScale(data.value))
+    .attr("fill", "green");
+
+    // container
+    // .selectAll('.bar')
+    // .data(arr)
     // .exit()
     // .remove()
 }
