@@ -43,24 +43,38 @@ const yScale = d3
 const container = d3.select('svg')
     .classed('container', true);
 
-// var l = 24; //Scaling
-
 // Draw function to graph the data after any changes
-function draw(arr) {
+function draw(arr, j, color) {
     // Removes any existing bars (rects) before each redraw
     container.selectAll('rect').remove()
 
+    // Adds the new bars in
     container
     .selectAll('.bar')
     .data(arr)
     .enter().append("rect")
-    .transition()
-    .duration(800)
+    // .transition()
+    // .duration(600)
     .attr('width', xScale.bandwidth())
     .attr('height', (data) => 600 - yScale(data.value))
     .attr('x', data => xScale(data.id))
     .attr('y', data => yScale(data.value))
-    .attr("fill", "#720570");
+    // .attr("fill", 'green');
+
+    // This code turns the bar currently being swapped green //
+    d3.selectAll('rect')
+    .each(function(d, i) {
+    var target = i === j;
+
+    // if(j == 12) {
+    // d3.select(this)
+    //   .style('fill', 'green')
+    // }
+
+    // else
+    d3.select(this)
+      .style('fill', target ? 'green' : '#720570')
+    });
 };
 
 //Find index of specific object using findIndex method. 
@@ -73,63 +87,83 @@ DUMMY_DATA.forEach(obj => {
     }
 });
 
-// Calls the draw function to draw the initial unsorted graph
-draw(DUMMY_DATA);
+// // Calls the draw function to draw the initial unsorted graph
+// draw(DUMMY_DATA);
+
+container
+    .selectAll('.bar')
+    .data(DUMMY_DATA)
+    .enter().append("rect")
+    // .transition()
+    // .duration(600)
+    .attr('width', xScale.bandwidth())
+    .attr('height', (data) => 600 - yScale(data.value))
+    .attr('x', data => xScale(data.id))
+    .attr('y', data => yScale(data.value))
+    .attr("fill", "#720570");
+
+var vals = []; //initializes array for slider array values
+var ids = []; //initializes array for slider array ids
+var bubblearr = []; //empty final array
+var button = document.getElementById("bubble-sort");
+
+//Adds the values from the DUMMY_DATA array to the empty 'vals' array
+for (var i = 0; i < DUMMY_DATA.length; i++) {
+    vals.push(DUMMY_DATA[i].value);
+}
+
+//Adds the ids from the SLIDER_DATA array to the empty 'ids' array
+for (var i = 0; i < DUMMY_DATA.length; i++) {
+    ids.push(DUMMY_DATA[i].id);
+}
 
 /////////////////////////////////////////////   Bubble sort function    ///////////////////////////////////////////////////////
 function bubbleSort() {
-    var vals = []; //initializes array for slider array values
-    var ids = []; //initializes array for slider array ids
-    var bubblearr = []; //empty final array
-
-    //Adds the values from the DUMMY_DATA array to the empty 'vals' array
-    for (var i = 0; i < DUMMY_DATA.length; i++) {
-        vals.push(DUMMY_DATA[i].value);
-    }
-
-    //Adds the ids from the SLIDER_DATA array to the empty 'ids' array
-    for (var i = 0; i < DUMMY_DATA.length; i++) {
-        ids.push(DUMMY_DATA[i].id);
-    }
 
     //Bubble sort function (copied from https://www.geeksforgeeks.org/bubble-sort-algorithms-by-using-javascript/)
     for(var i = 0; i < vals.length; i++){
         // bubblearr[i] = {id: ids[i], value: vals[i]}
-        // console.log("First for loop ", DUMMY_DATA);
      
         // Last i elements are already in place  
         for(var j = 0; j < (vals.length - i -1 ); j++){
-            // console.log("Second for loop ", DUMMY_DATA);
             
             // Checking if the item at present iteration is greater than the next iteration
-            if(DUMMY_DATA[j].value > DUMMY_DATA[j+1].value){    //Was vals[j] and vals[j+1]
-                // console.log("If statement ", DUMMY_DATA);
-
-
+            if(vals[j] > vals[j + 1]){    //Was vals[j] and vals[j+1] or DUMMY_DATA[j].value = DUMMY_DATA[j + 1].value
+                
                 ///////////////// Bubblearr version  ///////////////////////
                 // If the condition is true then swap them
                 var temp = vals[j]
                 vals[j] = vals[j + 1]
                 vals[j+1] = temp
 
-                // ///////////////// Static array version  ///////////////////////
-                // // If the condition is true then swap them
-                var temp2 = DUMMY_DATA[j].value
-                DUMMY_DATA[j].value = DUMMY_DATA[j + 1].value
-                DUMMY_DATA[j+1].value = temp2
+                // Needs to go here to get the final array with the last swapped value 
+                // This loop populates 
+                for (var i = 0; i < ids.length; i++) {
+                    bubblearr[i] = {id: ids[i], value: vals[i]}
+                }
 
-                // Calls the draw function to draw the sorted graph of data
-                // console.log(DUMMY_DATA);
-                // draw(DUMMY_DATA);
                 console.log(vals);
-                steps.push(DUMMY_DATA);
-            }
+                draw(bubblearr, j); //draws the new array after each pass
+                // console.log(j);
+                // console.log(bubblearr); //console logs the new array after each pass
+                // bubblearr = []; //resets the array of values each pass ready for new set
+            } 
         }
-        // console.log(DUMMY_DATA);
-        // draw(DUMMY_DATA);
     }
 }
 
-for (var i = 0; i < steps.length; i++) {
-    setInterval(draw(steps[i]), 1000);
+//This function calls the first bubblesort at the set interval (1s)
+function bubbleSort_wrap() {
+    setInterval(bubbleSort, 100); 
 }
+
+// Steps //
+//1. create bubblearr (temporary array of each step of sorting)
+//2. draw the graph with this new array (delayed with setInterval)
+//3. empty the array so that the next one that is made is the right size
+
+// New Steps //
+//1. Store the index of the value currently being swapped
+//2. Send this value to the draw function
+//3. Color the bar at said index green
+//4. Color entire bar green at end when fully sorted
