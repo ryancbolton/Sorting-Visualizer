@@ -66,15 +66,33 @@ function draw(arr, j, color) {
     .each(function(d, i) {
     var target = i === j;
 
-    // if(j == 12) {
-    // d3.select(this)
-    //   .style('fill', 'green')
-    // }
-
-    // else
     d3.select(this)
       .style('fill', target ? 'green' : '#720570')
     });
+
+
+    for (i = 0; i < arr.length-1; i++) { 
+        if (arr[i].value < arr[i + 1].value) {
+            console.log('true');
+            d3.selectAll('rect')
+            .style('fill', 'green')
+            
+        }
+        else {
+            console.log('false');
+            d3.selectAll('rect')
+            .style('fill', 'purple')
+        }
+    }
+
+     // This code turns the bar currently being swapped green //
+     d3.selectAll('rect')
+     .each(function(d, i) {
+     var target = i === j;
+ 
+     d3.select(this)
+       .style('fill', target ? 'green' : '#720570')
+     });
 };
 
 //Find index of specific object using findIndex method. 
@@ -88,19 +106,7 @@ DUMMY_DATA.forEach(obj => {
 });
 
 // // Calls the draw function to draw the initial unsorted graph
-// draw(DUMMY_DATA);
-
-container
-    .selectAll('.bar')
-    .data(DUMMY_DATA)
-    .enter().append("rect")
-    // .transition()
-    // .duration(600)
-    .attr('width', xScale.bandwidth())
-    .attr('height', (data) => 600 - yScale(data.value))
-    .attr('x', data => xScale(data.id))
-    .attr('y', data => yScale(data.value))
-    .attr("fill", "#720570");
+draw(DUMMY_DATA);
 
 var vals = []; //initializes array for slider array values
 var ids = []; //initializes array for slider array ids
@@ -156,6 +162,15 @@ function bubbleSort() {
 function bubbleSort_wrap() {
     setInterval(bubbleSort, 100); 
 }
+
+// for (i = 0; i < bubblearr.length; i++) { 
+//     if (bubblearr[i].value <= bubblearr[i + 1].value) {
+//         console.log('true');
+//     }
+//     else {
+//         console.log('false');
+//     }
+// }
 
 // Steps //
 //1. create bubblearr (temporary array of each step of sorting)
