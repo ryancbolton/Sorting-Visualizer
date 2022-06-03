@@ -17,8 +17,10 @@ This project is currently in development. Users can generate a new random array 
 To run this program, you will need to install the d3.js library with `npm install d3`, 
 
 or add the following lines of code to the header of your html:
+
 `<script src="https://d3js.org/d3.v7.min.js" charset="utf-8"></script>`
 and
+
 `<script src="https://d3js.org/d3-scale.v3.min.js"></script>`
 for scaling 
 
