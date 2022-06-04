@@ -32,9 +32,9 @@ I originally got the idea for this from Clement Mihailescu's YouTube video where
 
 However, I was new to HTML, CSS, and Javascript, and I wanted to strengthen my abilities with them as well as my knowledge of data structures and algorithms, hence why I decided to build it from scratch instead of relying on a framework and trying to run before I could walk so to speak. This is also my first "real" project I have worked on and essentially finished.
 
-Some challenges I ran into early on were getting used to d3.js enter(), update(), and exit() methods. Implementing the generate random array button was relatively easy, while the slider took longer. 
+Some challenges I ran into early on were getting used to d3.js `enter()`, `update()`, and `exit()` methods. Implementing the generate random array button was relatively easy, while the slider took longer. 
 
-The biggest challenge I ran into was getting the bar chart to update each step as the algorithm sorted the array. At first I was only able to get the final sorted graph to display, so I created a draw() function and used setInterval to control how quickly each graph was drawn compared to how quickly it was being sorted with the nested for loops in the bubblesort() function. 
+The biggest challenge I ran into was getting the bar chart to update each step as the algorithm sorted the array. At first I was only able to get the final sorted graph to display, so I created a `draw()` function and used `setInterval` to control how quickly each graph was drawn compared to how quickly it was being sorted with the nested for loops in the `bubblesort()` function. 
 
 Currently I am working on adding other sorting algorithms and combining the code as it is now with my first iteration, which included the random generate button and slider, but could not sort the data.
 
