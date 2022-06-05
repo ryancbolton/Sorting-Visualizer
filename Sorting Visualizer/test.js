@@ -26,7 +26,7 @@ const DUMMY_DATA = [
     { id: 'd25', value: 11}
 ];
 
-console.log(DUMMY_DATA)
+console.log("original data", DUMMY_DATA)
 
 var xScale = d3
 .scaleBand() //Gives all bars/items the same width
@@ -94,6 +94,29 @@ function draw(arr, j, color) {
     }
 };
 
+// /////////////////////////////////////////////   Generate button functions    ///////////////////////////////////////////////////////
+// // Grabs the "Generate Array" button
+// // var newarr = document.getElementById("generate-array");
+// function GenerateArr(){
+//     //Find index of specific object using findIndex method. 
+//     objIndex = DUMMY_DATA.findIndex((obj => obj.id));
+
+//     //Update object's value properties.
+//     DUMMY_DATA.forEach(obj => {
+//         for (var i = 0; i < DUMMY_DATA.length; i++) {
+//             DUMMY_DATA[i].value = Math.floor(Math.random() * 16);
+//         }
+//     });
+
+//     draw(DUMMY_DATA);
+//     console.log("generate array button", DUMMY_DATA)
+    
+// };
+
+// GenerateArr();
+
+
+
 //Find index of specific object using findIndex method. 
 objIndex = DUMMY_DATA.findIndex((obj => obj.id));
 
@@ -107,10 +130,11 @@ DUMMY_DATA.forEach(obj => {
 // // Calls the draw function to draw the initial unsorted graph
 draw(DUMMY_DATA);
 
+
 var vals = []; //initializes array for slider array values
 var ids = []; //initializes array for slider array ids
 var bubblearr = []; //empty final array
-var button = document.getElementById("bubble-sort");
+// var button = document.getElementById("bubble-sort");
 
 //Adds the values from the DUMMY_DATA array to the empty 'vals' array
 for (var i = 0; i < DUMMY_DATA.length; i++) {
@@ -124,6 +148,7 @@ for (var i = 0; i < DUMMY_DATA.length; i++) {
 
 /////////////////////////////////////////////   Bubble sort function    ///////////////////////////////////////////////////////
 function bubbleSort() {
+    // console.log("bubblesort function", DUMMY_DATA)
 
     //Bubble sort function (copied from https://www.geeksforgeeks.org/bubble-sort-algorithms-by-using-javascript/)
     for(var i = 0; i < vals.length; i++){
@@ -162,14 +187,8 @@ function bubbleSort_wrap() {
     setInterval(bubbleSort, 100); 
 }
 
-// for (i = 0; i < bubblearr.length; i++) { 
-//     if (bubblearr[i].value <= bubblearr[i + 1].value) {
-//         console.log('true');
-//     }
-//     else {
-//         console.log('false');
-//     }
-// }
+// clearInterval(setInterval(bubbleSort, 100));
+
 
 // Steps //
 //1. create bubblearr (temporary array of each step of sorting)
