@@ -26,8 +26,6 @@ const DUMMY_DATA = [
     { id: 'd25', value: 11}
 ];
 
-const steps = [];
-
 console.log(DUMMY_DATA)
 
 var xScale = d3
@@ -70,29 +68,30 @@ function draw(arr, j, color) {
       .style('fill', target ? 'green' : '#720570')
     });
 
-
+    // This code checks if the array is sorted, and pushed true or false to arr2
+    arr2 = [];
     for (i = 0; i < arr.length-1; i++) { 
-        if (arr[i].value < arr[i + 1].value) {
-            console.log('true');
-            d3.selectAll('rect')
-            .style('fill', 'green')
-            
+        if (arr[i].value > arr[i + 1].value) {
+            // console.log('false');
+            arr2.push(false);
+            // console.log(arr2)  
         }
         else {
-            console.log('false');
-            d3.selectAll('rect')
-            .style('fill', 'purple')
+            // console.log('true');
+            arr2.push(true);
+            // console.log(arr2)
         }
     }
-
-     // This code turns the bar currently being swapped green //
-     d3.selectAll('rect')
-     .each(function(d, i) {
-     var target = i === j;
- 
-     d3.select(this)
-       .style('fill', target ? 'green' : '#720570')
-     });
+    
+    // This code checks to see if every value in arr2 is true (i.e. the entire graph is sorted), and turns the graph green accordingly
+    let checker = arr => arr.every(v => v === true);
+    console.log(arr2)
+    console.log("is array sorted?", checker(arr2))
+    
+    if (checker(arr2) == true) {
+        d3.selectAll('rect')
+        .style('fill', 'green')
+    }
 };
 
 //Find index of specific object using findIndex method. 
