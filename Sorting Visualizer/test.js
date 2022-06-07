@@ -120,8 +120,11 @@ function GenerateArr(){
         }
     });
 
-    draw(DUMMY_DATA);
-    // console.log("generate array button", DUMMY_DATA)
+    draw(DUMMY_DATA); //Draws each newly generated array
+    vals = []; //Need to reset this here, otherwise the vals from the last fully sorted array in bubblesort() will still be there 
+
+    // Clears the setInterval of bubblesort_wrap() function to end the continuous calling of it
+    clearInterval(handle);
     
 };
 
@@ -164,36 +167,31 @@ function bubbleSort() {
 /////////////////////////////////////////////   Selection Sort function    ///////////////////////////////////////////////////////
 function selectionSort() {
     console.log("Selectionsort function", DUMMY_DATA)
-
-    let n = vals.length;
         
-    for(let i = 0; i < n; i++) {
+    for(var i = 0; i < vals.length; i++) {
         // Finding the smallest number in the subarray
         let min = i;
-        for(let j = i+1; j < n; j++){
+        for(var j = i+1; j < vals.length; j++){
             if(vals[j] < vals[min]) {
                 min=j; 
             }
             // draw(bubblearr, min); //draws the new array after each pass
          }
-         if (min != i) {
-             // Swapping the elements
-             let tmp = vals[i]; 
-             vals[i] = vals[min];
-             vals[min] = tmp;      
 
-
-             // Needs to go here to get the final array with the last swapped value 
-            // This loop populates 
-            for (var z = 0; z < ids.length; z++) {
-                bubblearr[z] = {id: ids[z], value: vals[z]}
-            }
-
-            // console.log(vals);
-            // draw(bubblearr, min); //draws the new array after each pass
+        if (min != i) {
+            // Swapping the elements
+            let tmp = vals[i]; 
+            vals[i] = vals[min];
+            vals[min] = tmp;      
         }
-        console.log(vals);
-        draw(bubblearr, i); //draws the new array after each pass
+        // Needs to go here to get the final array with the last swapped value 
+        // This loop populates 
+        for (var z = 0; z < ids.length; z++) {
+            bubblearr[z] = {id: ids[z], value: vals[z]}
+        }
+        console.log("selectionsort vals", vals)
+        console.log("selectionsort arrays", bubblearr)
+        draw(bubblearr, z);
     }
 }
 
@@ -213,7 +211,7 @@ function bubbleSort_wrap() {
     handle = setInterval(bubbleSort, 100); 
 }
 
-//This function calls the first bubblesort at the set interval (1s)
+//This function calls the first selectionsort at the set interval (1s)
 function selectionSort_wrap() {
     //Adds the values from the DUMMY_DATA array to the empty 'vals' array
     for (var i = 0; i < DUMMY_DATA.length; i++) {
