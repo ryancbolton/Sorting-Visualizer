@@ -26,6 +26,12 @@ const DUMMY_DATA = [
     { id: 'd25', value: 11}
 ];
 
+var vals = []; //initializes array for slider array values
+var ids = []; //initializes array for slider array ids
+var bubblearr = []; //empty final array
+
+var handle = null; //initializes the handle for setInterval and clearInterval
+
 console.log("original data", DUMMY_DATA)
 
 var xScale = d3
@@ -40,6 +46,9 @@ const yScale = d3
 
 const container = d3.select('svg')
     .classed('container', true);
+
+// Removes any existing bars (rects) before each redraw
+container.selectAll('rect').remove()
 
 // Draw function to graph the data after any changes
 function draw(arr, j, color) {
@@ -91,64 +100,37 @@ function draw(arr, j, color) {
     if (checker(arr2) == true) {
         d3.selectAll('rect')
         .style('fill', 'green')
+
+        // Clears the setInterval of bubblesort_wrap() function to end the continuous calling of it
+        clearInterval(handle);
     }
 };
 
-// /////////////////////////////////////////////   Generate button functions    ///////////////////////////////////////////////////////
-// // Grabs the "Generate Array" button
-// // var newarr = document.getElementById("generate-array");
-// function GenerateArr(){
-//     //Find index of specific object using findIndex method. 
-//     objIndex = DUMMY_DATA.findIndex((obj => obj.id));
+/////////////////////////////////////////////   Generate button functions    ///////////////////////////////////////////////////////
+// Grabs the "Generate Array" button
+// var newarr = document.getElementById("generate-array");
+function GenerateArr(){
+    //Find index of specific object using findIndex method. 
+    objIndex = DUMMY_DATA.findIndex((obj => obj.id));
 
-//     //Update object's value properties.
-//     DUMMY_DATA.forEach(obj => {
-//         for (var i = 0; i < DUMMY_DATA.length; i++) {
-//             DUMMY_DATA[i].value = Math.floor(Math.random() * 16);
-//         }
-//     });
+    //Update object's value properties.
+    DUMMY_DATA.forEach(obj => {
+        for (var i = 0; i < DUMMY_DATA.length; i++) {
+            DUMMY_DATA[i].value = Math.floor(Math.random() * 16);
+        }
+    });
 
-//     draw(DUMMY_DATA);
-//     console.log("generate array button", DUMMY_DATA)
+    draw(DUMMY_DATA);
+    // console.log("generate array button", DUMMY_DATA)
     
-// };
+};
 
-// GenerateArr();
-
-
-
-//Find index of specific object using findIndex method. 
-objIndex = DUMMY_DATA.findIndex((obj => obj.id));
-
-//Update object's value properties with random values.
-DUMMY_DATA.forEach(obj => {
-    for (var i = 0; i < DUMMY_DATA.length; i++) {
-        DUMMY_DATA[i].value = Math.floor(Math.random() * 16);
-    }
-});
-
-// // Calls the draw function to draw the initial unsorted graph
-draw(DUMMY_DATA);
-
-
-var vals = []; //initializes array for slider array values
-var ids = []; //initializes array for slider array ids
-var bubblearr = []; //empty final array
-// var button = document.getElementById("bubble-sort");
-
-//Adds the values from the DUMMY_DATA array to the empty 'vals' array
-for (var i = 0; i < DUMMY_DATA.length; i++) {
-    vals.push(DUMMY_DATA[i].value);
-}
-
-//Adds the ids from the SLIDER_DATA array to the empty 'ids' array
-for (var i = 0; i < DUMMY_DATA.length; i++) {
-    ids.push(DUMMY_DATA[i].id);
-}
+GenerateArr();
+// console.log("Before bubble sort", DUMMY_DATA)
 
 /////////////////////////////////////////////   Bubble sort function    ///////////////////////////////////////////////////////
 function bubbleSort() {
-    // console.log("bubblesort function", DUMMY_DATA)
+    console.log("bubblesort function", DUMMY_DATA)
 
     //Bubble sort function (copied from https://www.geeksforgeeks.org/bubble-sort-algorithms-by-using-javascript/)
     for(var i = 0; i < vals.length; i++){
@@ -174,29 +156,75 @@ function bubbleSort() {
 
                 console.log(vals);
                 draw(bubblearr, j); //draws the new array after each pass
-                // console.log(j);
-                // console.log(bubblearr); //console logs the new array after each pass
-                // bubblearr = []; //resets the array of values each pass ready for new set
             } 
         }
     }
 }
 
-//This function calls the first bubblesort at the set interval (1s)
-function bubbleSort_wrap() {
-    setInterval(bubbleSort, 100); 
+/////////////////////////////////////////////   Selection Sort function    ///////////////////////////////////////////////////////
+function selectionSort() {
+    console.log("Selectionsort function", DUMMY_DATA)
+
+    let n = vals.length;
+        
+    for(let i = 0; i < n; i++) {
+        // Finding the smallest number in the subarray
+        let min = i;
+        for(let j = i+1; j < n; j++){
+            if(vals[j] < vals[min]) {
+                min=j; 
+            }
+            // draw(bubblearr, min); //draws the new array after each pass
+         }
+         if (min != i) {
+             // Swapping the elements
+             let tmp = vals[i]; 
+             vals[i] = vals[min];
+             vals[min] = tmp;      
+
+
+             // Needs to go here to get the final array with the last swapped value 
+            // This loop populates 
+            for (var z = 0; z < ids.length; z++) {
+                bubblearr[z] = {id: ids[z], value: vals[z]}
+            }
+
+            // console.log(vals);
+            // draw(bubblearr, min); //draws the new array after each pass
+        }
+        console.log(vals);
+        draw(bubblearr, i); //draws the new array after each pass
+    }
 }
 
-// clearInterval(setInterval(bubbleSort, 100));
+//This function calls the first bubblesort at the set interval (1s)
+function bubbleSort_wrap() {
+    //Adds the values from the DUMMY_DATA array to the empty 'vals' array
+    for (var i = 0; i < DUMMY_DATA.length; i++) {
+        vals.push(DUMMY_DATA[i].value);
+    }
 
+    //Adds the ids from the SLIDER_DATA array to the empty 'ids' array
+    for (var i = 0; i < DUMMY_DATA.length; i++) {
+        ids.push(DUMMY_DATA[i].id);
+    }
 
-// Steps //
-//1. create bubblearr (temporary array of each step of sorting)
-//2. draw the graph with this new array (delayed with setInterval)
-//3. empty the array so that the next one that is made is the right size
+    //Starts an interval to continously call bubblesort until the array is sorted
+    handle = setInterval(bubbleSort, 100); 
+}
 
-// New Steps //
-//1. Store the index of the value currently being swapped
-//2. Send this value to the draw function
-//3. Color the bar at said index green
-//4. Color entire bar green at end when fully sorted
+//This function calls the first bubblesort at the set interval (1s)
+function selectionSort_wrap() {
+    //Adds the values from the DUMMY_DATA array to the empty 'vals' array
+    for (var i = 0; i < DUMMY_DATA.length; i++) {
+        vals.push(DUMMY_DATA[i].value);
+    }
+
+    //Adds the ids from the SLIDER_DATA array to the empty 'ids' array
+    for (var i = 0; i < DUMMY_DATA.length; i++) {
+        ids.push(DUMMY_DATA[i].id);
+    }
+
+    //Starts an interval to continously call bubblesort until the array is sorted
+    handle = setInterval(selectionSort, 100); 
+}
