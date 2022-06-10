@@ -165,7 +165,7 @@ function bubbleSort() {
 }
 
 /////////////////////////////////////////////   Selection Sort function    ///////////////////////////////////////////////////////
-function selectionSort() {
+async function selectionSort() {
     console.log("Selectionsort function", DUMMY_DATA)
         
     for(var i = 0; i < vals.length; i++) {
@@ -189,8 +189,11 @@ function selectionSort() {
         for (var z = 0; z < ids.length; z++) {
             bubblearr[z] = {id: ids[z], value: vals[z]}
         }
+        // bubblearr[i] = {id: ids[i], value: vals[i]}
         console.log("selectionsort vals", vals)
         console.log("selectionsort arrays", bubblearr)
+        // await new Promise(resolve => requestAnimationFrame(resolve));
+        await new Promise(resolve => setTimeout(resolve, 100));
         draw(bubblearr, z);
     }
 }
@@ -218,7 +221,7 @@ function selectionSort_wrap() {
         vals.push(DUMMY_DATA[i].value);
     }
 
-    //Adds the ids from the SLIDER_DATA array to the empty 'ids' array
+    //Adds the ids from the DUMMY_DATA array to the empty 'ids' array
     for (var i = 0; i < DUMMY_DATA.length; i++) {
         ids.push(DUMMY_DATA[i].id);
     }
