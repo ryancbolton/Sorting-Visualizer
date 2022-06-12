@@ -222,6 +222,33 @@ async function selectionSort() {
 //     return quicksort(left).concat(pivot, quicksort(right));
 //   };
 
+/////////////////////////////////////////////   Insertion Sort function    ///////////////////////////////////////////////////////
+async function insertionSort() {
+        for (let i = 1; i < vals.length; i++) {
+            // Choosing the first element in our unsorted subarray
+            let current = vals[i];
+            // The last element of our sorted subarray
+            let j = i-1; 
+            while ((j > -1) && (current < vals[j])) {
+                vals[j+1] = vals[j];
+                j--;
+            }
+            vals[j+1] = current;
+
+            // Needs to go here to get the final array with the last swapped value 
+            // This loop populates 
+            for (var z = 0; z < ids.length; z++) {
+                bubblearr[z] = {id: ids[z], value: vals[z]}
+            }
+            // bubblearr[i] = {id: ids[i], value: vals[i]}
+            // await new Promise(resolve => requestAnimationFrame(resolve));
+            await new Promise(resolve => setTimeout(resolve, 100));
+            draw(bubblearr, z);
+        }
+}
+
+/////////////////////////////////////////////   Wrapper functions    ///////////////////////////////////////////////////////
+
 //This function calls the first bubblesort at the set interval (1s)
 function bubbleSort_wrap() {
     //Adds the values from the DUMMY_DATA array to the empty 'vals' array
@@ -269,3 +296,19 @@ function selectionSort_wrap() {
 //     //Starts an interval to continously call selection sort until the array is sorted
 //     handle = setInterval(quicksort(vals), 100); 
 // }
+
+//This function calls the first selectionsort at the set interval (1s)
+function insertionSort_wrap() {
+    //Adds the values from the DUMMY_DATA array to the empty 'vals' array
+    for (var i = 0; i < DUMMY_DATA.length; i++) {
+        vals.push(DUMMY_DATA[i].value);
+    }
+
+    //Adds the ids from the DUMMY_DATA array to the empty 'ids' array
+    for (var i = 0; i < DUMMY_DATA.length; i++) {
+        ids.push(DUMMY_DATA[i].id);
+    }
+
+    //Starts an interval to continously call selection sort until the array is sorted
+    handle = setInterval(insertionSort, 100); 
+}
