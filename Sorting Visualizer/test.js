@@ -78,7 +78,7 @@ function draw(arr, j, color) {
     });
 
     // This code checks if the array is sorted, and pushed true or false to arr2
-    arr2 = [];
+    var arr2 = [];
     for (i = 0; i < arr.length-1; i++) { 
         if (arr[i].value > arr[i + 1].value) {
             // console.log('false');
@@ -198,6 +198,30 @@ async function selectionSort() {
     }
 }
 
+// /////////////////////////////////////////////   QuickSort function    ///////////////////////////////////////////////////////
+// async function quicksort(array) {
+//     if (array.length <= 1) {
+//       return array;
+//     }
+  
+//     var pivot = array[0];
+    
+//     var left = []; 
+//     var right = [];
+  
+//     for (var i = 1; i < array.length; i++) {
+//       array[i] < pivot ? left.push(array[i]) : right.push(array[i]);
+//     }
+
+//     for (var z = 0; z < ids.length; z++) {
+//         bubblearr[z] = {id: ids[z], value: vals[z]}
+//     }
+//     await new Promise(resolve => setTimeout(resolve, 100));
+//     draw(bubblearr, z);
+  
+//     return quicksort(left).concat(pivot, quicksort(right));
+//   };
+
 //This function calls the first bubblesort at the set interval (1s)
 function bubbleSort_wrap() {
     //Adds the values from the DUMMY_DATA array to the empty 'vals' array
@@ -205,7 +229,7 @@ function bubbleSort_wrap() {
         vals.push(DUMMY_DATA[i].value);
     }
 
-    //Adds the ids from the SLIDER_DATA array to the empty 'ids' array
+    //Adds the ids from the DUMMY_DATA array to the empty 'ids' array
     for (var i = 0; i < DUMMY_DATA.length; i++) {
         ids.push(DUMMY_DATA[i].id);
     }
@@ -226,6 +250,22 @@ function selectionSort_wrap() {
         ids.push(DUMMY_DATA[i].id);
     }
 
-    //Starts an interval to continously call bubblesort until the array is sorted
+    //Starts an interval to continously call selection sort until the array is sorted
     handle = setInterval(selectionSort, 100); 
 }
+
+// //This function calls the first selectionsort at the set interval (1s)
+// function quickSort_wrap() {
+//     //Adds the values from the DUMMY_DATA array to the empty 'vals' array
+//     for (var i = 0; i < DUMMY_DATA.length; i++) {
+//         vals.push(DUMMY_DATA[i].value);
+//     }
+
+//     //Adds the ids from the DUMMY_DATA array to the empty 'ids' array
+//     for (var i = 0; i < DUMMY_DATA.length; i++) {
+//         ids.push(DUMMY_DATA[i].id);
+//     }
+
+//     //Starts an interval to continously call selection sort until the array is sorted
+//     handle = setInterval(quicksort(vals), 100); 
+// }
