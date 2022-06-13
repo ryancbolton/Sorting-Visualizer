@@ -26,8 +26,8 @@ const DUMMY_DATA = [
     { id: 'd25', value: 11}
 ];
 
-var vals = []; //initializes array for slider array values
-var ids = []; //initializes array for slider array ids
+// var vals = []; //initializes array for slider array values
+// var ids = []; //initializes array for slider array ids
 var bubblearr = []; //empty final array
 
 var handle = null; //initializes the handle for setInterval and clearInterval
@@ -94,8 +94,9 @@ function draw(arr, j, color) {
     
     // This code checks to see if every value in arr2 is true (i.e. the entire graph is sorted), and turns the graph green accordingly
     let checker = arr => arr.every(v => v === true);
+    console.log(arr)
     console.log(arr2)
-    console.log("is array sorted?", checker(arr2))
+    // console.log("is array sorted?", checker(arr2))
     
     if (checker(arr2) == true) {
         d3.selectAll('rect')
@@ -121,7 +122,8 @@ function GenerateArr(){
     });
 
     draw(DUMMY_DATA); //Draws each newly generated array
-    vals = []; //Need to reset this here, otherwise the vals from the last fully sorted array in bubblesort() will still be there 
+    // ids = [];
+    // vals = []; //Need to reset this here, otherwise the vals from the last fully sorted array in bubblesort() will still be there 
 
     // Clears the setInterval of bubblesort_wrap() function to end the continuous calling of it
     clearInterval(handle);
@@ -165,7 +167,7 @@ function bubbleSort() {
 }
 
 /////////////////////////////////////////////   Selection Sort function    ///////////////////////////////////////////////////////
-async function selectionSort() {
+async function selectionSort(ids, vals) {
     console.log("Selectionsort function", DUMMY_DATA)
         
     for(var i = 0; i < vals.length; i++) {
@@ -188,13 +190,15 @@ async function selectionSort() {
         // This loop populates 
         for (var z = 0; z < ids.length; z++) {
             bubblearr[z] = {id: ids[z], value: vals[z]}
+            await new Promise(resolve => setTimeout(resolve, 25));
+            draw(bubblearr, z);
         }
-        // bubblearr[i] = {id: ids[i], value: vals[i]}
-        console.log("selectionsort vals", vals)
-        console.log("selectionsort arrays", bubblearr)
-        // await new Promise(resolve => requestAnimationFrame(resolve));
-        await new Promise(resolve => setTimeout(resolve, 100));
-        draw(bubblearr, z);
+        // // bubblearr[i] = {id: ids[i], value: vals[i]}
+        // console.log("selectionsort vals", vals)
+        // console.log("selectionsort arrays", bubblearr)
+        // // await new Promise(resolve => requestAnimationFrame(resolve));
+        // await new Promise(resolve => setTimeout(resolve, 100));
+        // draw(bubblearr, z);
     }
 }
 
@@ -223,7 +227,8 @@ async function selectionSort() {
 //   };
 
 /////////////////////////////////////////////   Insertion Sort function    ///////////////////////////////////////////////////////
-async function insertionSort() {
+async function insertionSort(ids, vals) {
+    // console.log("Insertionsort function", DUMMY_DATA)
         for (let i = 1; i < vals.length; i++) {
             // Choosing the first element in our unsorted subarray
             let current = vals[i];
@@ -239,11 +244,13 @@ async function insertionSort() {
             // This loop populates 
             for (var z = 0; z < ids.length; z++) {
                 bubblearr[z] = {id: ids[z], value: vals[z]}
+                await new Promise(resolve => setTimeout(resolve, 25));
+                draw(bubblearr, z);
             }
             // bubblearr[i] = {id: ids[i], value: vals[i]}
             // await new Promise(resolve => requestAnimationFrame(resolve));
-            await new Promise(resolve => setTimeout(resolve, 100));
-            draw(bubblearr, z);
+            // await new Promise(resolve => setTimeout(resolve, 100));
+            // draw(bubblearr, z);
         }
 }
 
@@ -251,6 +258,8 @@ async function insertionSort() {
 
 //This function calls the first bubblesort at the set interval (1s)
 function bubbleSort_wrap() {
+    ids = [];
+    vals = []; //Need to reset this here, otherwise the vals from the last fully sorted array in bubblesort() will still be there 
     //Adds the values from the DUMMY_DATA array to the empty 'vals' array
     for (var i = 0; i < DUMMY_DATA.length; i++) {
         vals.push(DUMMY_DATA[i].value);
@@ -262,11 +271,13 @@ function bubbleSort_wrap() {
     }
 
     //Starts an interval to continously call bubblesort until the array is sorted
-    handle = setInterval(bubbleSort, 100); 
+    handle = setInterval(bubbleSort(), 100); 
 }
 
 //This function calls the first selectionsort at the set interval (1s)
 function selectionSort_wrap() {
+    ids = [];
+    vals = []; //Need to reset this here, otherwise the vals from the last fully sorted array in bubblesort() will still be there 
     //Adds the values from the DUMMY_DATA array to the empty 'vals' array
     for (var i = 0; i < DUMMY_DATA.length; i++) {
         vals.push(DUMMY_DATA[i].value);
@@ -278,7 +289,7 @@ function selectionSort_wrap() {
     }
 
     //Starts an interval to continously call selection sort until the array is sorted
-    handle = setInterval(selectionSort, 100); 
+    handle = setInterval(selectionSort(ids, vals), 100); 
 }
 
 // //This function calls the first selectionsort at the set interval (1s)
@@ -299,6 +310,8 @@ function selectionSort_wrap() {
 
 //This function calls the first selectionsort at the set interval (1s)
 function insertionSort_wrap() {
+    ids = [];
+    vals = []; //Need to reset this here, otherwise the vals from the last fully sorted array in bubblesort() will still be there 
     //Adds the values from the DUMMY_DATA array to the empty 'vals' array
     for (var i = 0; i < DUMMY_DATA.length; i++) {
         vals.push(DUMMY_DATA[i].value);
@@ -310,5 +323,5 @@ function insertionSort_wrap() {
     }
 
     //Starts an interval to continously call selection sort until the array is sorted
-    handle = setInterval(insertionSort, 100); 
+    handle = setInterval(insertionSort(ids, vals), 100); 
 }
