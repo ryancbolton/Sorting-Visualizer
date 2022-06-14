@@ -26,8 +26,8 @@ const DUMMY_DATA = [
     { id: 'd25', value: 11}
 ];
 
-// var vals = []; //initializes array for slider array values
-// var ids = []; //initializes array for slider array ids
+var vals = []; //initializes array for slider array values
+var ids = []; //initializes array for slider array ids
 var bubblearr = []; //empty final array
 
 var handle = null; //initializes the handle for setInterval and clearInterval
@@ -107,6 +107,20 @@ function draw(arr, j, color) {
     }
 };
 
+// /////////////////////////////////////////////   Swap function    ///////////////////////////////////////////////////////
+// function swap(arr, j) {
+//     // Checking if the item at present iteration is greater than the next iteration
+//     if(arr[j] > arr[j + 1]){
+
+//         var temp = arr[j]
+//         arr[j] = arr[j + 1]
+//         arr[j+1] = temp
+
+//         return arr;
+//     }
+
+// }
+
 /////////////////////////////////////////////   Generate button functions    ///////////////////////////////////////////////////////
 // Grabs the "Generate Array" button
 // var newarr = document.getElementById("generate-array");
@@ -122,8 +136,8 @@ function GenerateArr(){
     });
 
     draw(DUMMY_DATA); //Draws each newly generated array
-    // ids = [];
-    // vals = []; //Need to reset this here, otherwise the vals from the last fully sorted array in bubblesort() will still be there 
+    ids = []; //Need to reset ids too or there will be ids with no values each time
+    vals = []; //Need to reset this here, otherwise the vals from the last fully sorted array in bubblesort() will still be there 
 
     // Clears the setInterval of bubblesort_wrap() function to end the continuous calling of it
     clearInterval(handle);
@@ -152,6 +166,8 @@ function bubbleSort() {
                 var temp = vals[j]
                 vals[j] = vals[j + 1]
                 vals[j+1] = temp
+
+                // vals = swap(vals, j);
 
                 // Needs to go here to get the final array with the last swapped value 
                 // This loop populates 
@@ -185,6 +201,8 @@ async function selectionSort(ids, vals) {
             let tmp = vals[i]; 
             vals[i] = vals[min];
             vals[min] = tmp;      
+
+            // vals = swap(vals);
         }
         // Needs to go here to get the final array with the last swapped value 
         // This loop populates 
@@ -258,8 +276,8 @@ async function insertionSort(ids, vals) {
 
 //This function calls the first bubblesort at the set interval (1s)
 function bubbleSort_wrap() {
-    ids = [];
-    vals = []; //Need to reset this here, otherwise the vals from the last fully sorted array in bubblesort() will still be there 
+    // ids = [];
+    // vals = []; //Need to reset this here, otherwise the vals from the last fully sorted array in bubblesort() will still be there 
     //Adds the values from the DUMMY_DATA array to the empty 'vals' array
     for (var i = 0; i < DUMMY_DATA.length; i++) {
         vals.push(DUMMY_DATA[i].value);
@@ -271,25 +289,26 @@ function bubbleSort_wrap() {
     }
 
     //Starts an interval to continously call bubblesort until the array is sorted
-    handle = setInterval(bubbleSort(), 100); 
+    handle = setInterval(bubbleSort, 100); 
 }
 
 //This function calls the first selectionsort at the set interval (1s)
 function selectionSort_wrap() {
-    ids = [];
-    vals = []; //Need to reset this here, otherwise the vals from the last fully sorted array in bubblesort() will still be there 
+    selectionids = [];
+    selectionvals = []; 
     //Adds the values from the DUMMY_DATA array to the empty 'vals' array
     for (var i = 0; i < DUMMY_DATA.length; i++) {
-        vals.push(DUMMY_DATA[i].value);
+        selectionvals.push(DUMMY_DATA[i].value);
     }
 
     //Adds the ids from the DUMMY_DATA array to the empty 'ids' array
     for (var i = 0; i < DUMMY_DATA.length; i++) {
-        ids.push(DUMMY_DATA[i].id);
+        selectionids.push(DUMMY_DATA[i].id);
     }
 
     //Starts an interval to continously call selection sort until the array is sorted
-    handle = setInterval(selectionSort(ids, vals), 100); 
+    // handle = setTimeout(selectionSort(selectionids, selectionvals), 100); 
+    selectionSort(selectionids, selectionvals);
 }
 
 // //This function calls the first selectionsort at the set interval (1s)
@@ -310,18 +329,26 @@ function selectionSort_wrap() {
 
 //This function calls the first selectionsort at the set interval (1s)
 function insertionSort_wrap() {
-    ids = [];
-    vals = []; //Need to reset this here, otherwise the vals from the last fully sorted array in bubblesort() will still be there 
+    insertionids = [];
+    insertionvals = []; 
     //Adds the values from the DUMMY_DATA array to the empty 'vals' array
     for (var i = 0; i < DUMMY_DATA.length; i++) {
-        vals.push(DUMMY_DATA[i].value);
+        insertionvals.push(DUMMY_DATA[i].value);
     }
 
     //Adds the ids from the DUMMY_DATA array to the empty 'ids' array
     for (var i = 0; i < DUMMY_DATA.length; i++) {
-        ids.push(DUMMY_DATA[i].id);
+        insertionids.push(DUMMY_DATA[i].id);
     }
 
     //Starts an interval to continously call selection sort until the array is sorted
-    handle = setInterval(insertionSort(ids, vals), 100); 
+    // handle = setTimeout(insertionSort(insertionids, insertionvals), 100);
+    insertionSort(insertionids, insertionvals) 
 }
+
+// To do:
+// 1. Get rid of all global variables
+// 2. Create a swap function (may not be doable/usable for all sorting algs)
+// 3. Combine all the wrapper functions into one (alot of repeated code there, might also not be doable realistically)
+// 4. Add the slider back in
+// 5. Try to add at least 1 more complex sorting alg (quicksort, mergesort, heapsort, etc.)
