@@ -26,9 +26,9 @@ const DUMMY_DATA = [
     { id: 'd25', value: 11}
 ];
 
-var vals = []; //initializes array for slider array values
-var ids = []; //initializes array for slider array ids
-var bubblearr = []; //empty final array
+// var vals = []; //initializes array for slider array values
+// var ids = []; //initializes array for slider array ids
+// var bubblearr = []; //empty final array
 
 var handle = null; //initializes the handle for setInterval and clearInterval
 
@@ -136,8 +136,8 @@ function GenerateArr(){
     });
 
     draw(DUMMY_DATA); //Draws each newly generated array
-    ids = []; //Need to reset ids too or there will be ids with no values each time
-    vals = []; //Need to reset this here, otherwise the vals from the last fully sorted array in bubblesort() will still be there 
+    // ids = []; //Need to reset ids too or there will be ids with no values each time
+    // vals = []; //Need to reset this here, otherwise the vals from the last fully sorted array in bubblesort() will still be there 
 
     // Clears the setInterval of bubblesort_wrap() function to end the continuous calling of it
     clearInterval(handle);
@@ -148,7 +148,8 @@ GenerateArr();
 // console.log("Before bubble sort", DUMMY_DATA)
 
 /////////////////////////////////////////////   Bubble sort function    ///////////////////////////////////////////////////////
-function bubbleSort() {
+async function bubbleSort(ids, vals) {
+    bubblearr = [];
     console.log("bubblesort function", DUMMY_DATA)
 
     //Bubble sort function (copied from https://www.geeksforgeeks.org/bubble-sort-algorithms-by-using-javascript/)
@@ -176,6 +177,7 @@ function bubbleSort() {
                 }
 
                 console.log(vals);
+                await new Promise(resolve => setTimeout(resolve, 25));
                 draw(bubblearr, j); //draws the new array after each pass
             } 
         }
@@ -184,6 +186,7 @@ function bubbleSort() {
 
 /////////////////////////////////////////////   Selection Sort function    ///////////////////////////////////////////////////////
 async function selectionSort(ids, vals) {
+    bubblearr = [];
     console.log("Selectionsort function", DUMMY_DATA)
         
     for(var i = 0; i < vals.length; i++) {
@@ -246,6 +249,7 @@ async function selectionSort(ids, vals) {
 
 /////////////////////////////////////////////   Insertion Sort function    ///////////////////////////////////////////////////////
 async function insertionSort(ids, vals) {
+    bubblearr = [];
     // console.log("Insertionsort function", DUMMY_DATA)
         for (let i = 1; i < vals.length; i++) {
             // Choosing the first element in our unsorted subarray
@@ -276,20 +280,21 @@ async function insertionSort(ids, vals) {
 
 //This function calls the first bubblesort at the set interval (1s)
 function bubbleSort_wrap() {
-    // ids = [];
-    // vals = []; //Need to reset this here, otherwise the vals from the last fully sorted array in bubblesort() will still be there 
+    bubbleids = [];
+    bubblevals = []; //Need to reset this here, otherwise the vals from the last fully sorted array in bubblesort() will still be there 
     //Adds the values from the DUMMY_DATA array to the empty 'vals' array
     for (var i = 0; i < DUMMY_DATA.length; i++) {
-        vals.push(DUMMY_DATA[i].value);
+        bubblevals.push(DUMMY_DATA[i].value);
     }
 
     //Adds the ids from the DUMMY_DATA array to the empty 'ids' array
     for (var i = 0; i < DUMMY_DATA.length; i++) {
-        ids.push(DUMMY_DATA[i].id);
+        bubbleids.push(DUMMY_DATA[i].id);
     }
 
     //Starts an interval to continously call bubblesort until the array is sorted
-    handle = setInterval(bubbleSort, 100); 
+    // handle = setInterval(bubbleSort, 100); 
+    bubbleSort(bubbleids, bubblevals);
 }
 
 //This function calls the first selectionsort at the set interval (1s)
@@ -352,3 +357,4 @@ function insertionSort_wrap() {
 // 3. Combine all the wrapper functions into one (alot of repeated code there, might also not be doable realistically)
 // 4. Add the slider back in
 // 5. Try to add at least 1 more complex sorting alg (quicksort, mergesort, heapsort, etc.)
+// 6. Add a rate slider to change how fast the algs sort
