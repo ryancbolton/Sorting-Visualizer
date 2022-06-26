@@ -23,7 +23,82 @@ const DUMMY_DATA = [
     { id: 'd22', value: 8},
     { id: 'd23', value: 5},
     { id: 'd24', value: 5},
-    { id: 'd25', value: 11}
+    { id: 'd25', value: 11},
+    { id: 'd26', value: 11},
+    { id: 'd27', value: 12},
+    { id: 'd28', value: 10},
+    { id: 'd29', value: 6},
+    { id: 'd30', value: 13},
+    { id: 'd31', value: 14},
+    { id: 'd32', value: 2},
+    { id: 'd33', value: 12},
+    { id: 'd34', value: 11},
+    { id: 'd35', value: 10},
+    { id: 'd36', value: 5},
+    { id: 'd37', value: 6},
+    { id: 'd38', value: 7},
+    { id: 'd39', value: 14},
+    { id: 'd40', value: 14},
+    { id: 'd41', value: 1},
+    { id: 'd42', value: 0},
+    { id: 'd43', value: 11},
+    { id: 'd44', value: 15},
+    { id: 'd45', value: 7},
+    { id: 'd46', value: 13},
+    { id: 'd47', value: 4},
+    { id: 'd48', value: 4},
+    { id: 'd49', value: 4},
+    { id: 'd50', value: 11},
+    { id: 'd51', value: 10},
+    { id: 'd52', value: 5},
+    { id: 'd53', value: 1},
+    { id: 'd54', value: 6},
+    { id: 'd55', value: 7},
+    { id: 'd56', value: 0},
+    { id: 'd57', value: 0},
+    { id: 'd58', value: 2},
+    { id: 'd59', value: 10},
+    { id: 'd60', value: 11},
+    { id: 'd61', value: 3},
+    { id: 'd62', value: 13},
+    { id: 'd63', value: 7},
+    { id: 'd64', value: 13},
+    { id: 'd65', value: 2},
+    { id: 'd66', value: 2},
+    { id: 'd67', value: 1},
+    { id: 'd68', value: 2},
+    { id: 'd69', value: 3},
+    { id: 'd70', value: 7},
+    { id: 'd71', value: 6},
+    { id: 'd72', value: 10},
+    { id: 'd73', value: 12},
+    { id: 'd74', value: 2},
+    { id: 'd75', value: 10},
+    { id: 'd76', value: 11},
+    { id: 'd77', value: 12},
+    { id: 'd78', value: 2},
+    { id: 'd79', value: 3},
+    { id: 'd80', value: 13},
+    { id: 'd81', value: 14},
+    { id: 'd82', value: 12},
+    { id: 'd83', value: 0},
+    { id: 'd84', value: 11},
+    { id: 'd85', value: 2},
+    { id: 'd86', value: 5},
+    { id: 'd87', value: 7},
+    { id: 'd88', value: 3},
+    { id: 'd89', value: 14},
+    { id: 'd90', value: 12},
+    { id: 'd91', value: 10},
+    { id: 'd92', value: 10},
+    { id: 'd93', value: 10},
+    { id: 'd94', value: 6},
+    { id: 'd95', value: 7},
+    { id: 'd96', value: 13},
+    { id: 'd97', value: 0},
+    { id: 'd98', value: 2},
+    { id: 'd99', value: 1},
+    { id: 'd100', value: 11},
 ];
 
 console.log("original data", DUMMY_DATA)
@@ -95,9 +170,6 @@ function draw(arr, j, color) {
     if (checker(arr2) == true) {
         d3.selectAll('rect')
         .style('fill', 'green')
-
-        // Clears the setInterval of bubblesort_wrap() function to end the continuous calling of it
-        clearInterval(handle);
     }
 };
 
@@ -130,14 +202,57 @@ function GenerateArr(){
     });
 
     draw(DUMMY_DATA); //Draws each newly generated array
-
-    // Clears the setInterval of bubblesort_wrap() function to end the continuous calling of it
-    clearInterval(handle);
     
 };
 
 GenerateArr();
 // console.log("Before bubble sort", DUMMY_DATA)
+
+
+
+
+/////////////////////////////////////////////   Slider functions    ///////////////////////////////////////////////////////
+var slider = document.getElementById("myRange");
+var output = document.getElementById("demo");
+
+// Display the default slider value and print to console
+output.innerHTML = slider.value;
+// console.log(slider.value)
+
+// //Take portion of original dataset
+// SLIDER_DATA = DUMMY_DATA.slice(0, slider.value)
+
+update=()=>{
+
+    //Output currently updated slider value and print to console
+    output.innerHTML = slider.value; 
+    console.log(slider.value)
+
+    //Take portion of original dataset
+    SLIDER_DATA = DUMMY_DATA.slice(0, slider.value)
+
+    //Change xscale to be based off new SLIDER array instead of original DUMMY array
+    xScale = d3
+        .scaleBand() //Gives all bars/items the same width
+        .domain(SLIDER_DATA.map((dataPoint) => dataPoint.id)) //Tells scaleBand() how many data points there are based on the number of ids
+        .rangeRound([0, 1000]) //Sets the range of the area the bars are generated in, i.e. the width of the container
+        .padding(0.1); //Puts padding between the bars
+
+    //Update object's value properties.
+    SLIDER_DATA.forEach(obj => {
+        for (var i = 0; i < SLIDER_DATA.length; i++) {
+            SLIDER_DATA[i].value = Math.floor(Math.random() * 16);
+        }
+    });
+
+    draw(SLIDER_DATA);
+
+}   
+//Event listener to detect when slider is being used and invoke update
+slider.addEventListener('input', update);
+
+//Creates global slider data array for use in the sorting functions (was previously inside the sorting function itself below vals array initiation)
+var SLIDER_DATA = update()
 
 
 // /////////////////////////////////////////////   Sorting functions start    ///////////////////////////////////////////////////////
@@ -228,14 +343,15 @@ async function insertionSort(ids, vals) {
 function bubbleSort_wrap() {
     bubbleids = [];
     bubblevals = []; 
+    SLIDER_DATA = DUMMY_DATA.slice(0, slider.value)
     //Adds the values from the DUMMY_DATA array to the empty 'vals' array
-    for (var i = 0; i < DUMMY_DATA.length; i++) {
-        bubblevals.push(DUMMY_DATA[i].value);
+    for (var i = 0; i < SLIDER_DATA.length; i++) {
+        bubblevals.push(SLIDER_DATA[i].value);
     }
 
     //Adds the ids from the DUMMY_DATA array to the empty 'ids' array
-    for (var i = 0; i < DUMMY_DATA.length; i++) {
-        bubbleids.push(DUMMY_DATA[i].id);
+    for (var i = 0; i < SLIDER_DATA.length; i++) {
+        bubbleids.push(SLIDER_DATA[i].id);
     }
 
     bubbleSort(bubbleids, bubblevals) 
@@ -244,14 +360,15 @@ function bubbleSort_wrap() {
 function selectionSort_wrap() {
     selectionids = [];
     selectionvals = []; 
+    SLIDER_DATA = DUMMY_DATA.slice(0, slider.value)
     //Adds the values from the DUMMY_DATA array to the empty 'vals' array
-    for (var i = 0; i < DUMMY_DATA.length; i++) {
-        selectionvals.push(DUMMY_DATA[i].value);
+    for (var i = 0; i < SLIDER_DATA.length; i++) {
+        selectionvals.push(SLIDER_DATA[i].value);
     }
 
     //Adds the ids from the DUMMY_DATA array to the empty 'ids' array
-    for (var i = 0; i < DUMMY_DATA.length; i++) {
-        selectionids.push(DUMMY_DATA[i].id);
+    for (var i = 0; i < SLIDER_DATA.length; i++) {
+        selectionids.push(SLIDER_DATA[i].id);
     }
 
     selectionSort(selectionids, selectionvals);
@@ -260,14 +377,15 @@ function selectionSort_wrap() {
 function insertionSort_wrap() {
     insertionids = [];
     insertionvals = []; 
+    SLIDER_DATA = DUMMY_DATA.slice(0, slider.value)
     //Adds the values from the DUMMY_DATA array to the empty 'vals' array
-    for (var i = 0; i < DUMMY_DATA.length; i++) {
-        insertionvals.push(DUMMY_DATA[i].value);
+    for (var i = 0; i < SLIDER_DATA.length; i++) {
+        insertionvals.push(SLIDER_DATA[i].value);
     }
 
     //Adds the ids from the DUMMY_DATA array to the empty 'ids' array
-    for (var i = 0; i < DUMMY_DATA.length; i++) {
-        insertionids.push(DUMMY_DATA[i].id);
+    for (var i = 0; i < SLIDER_DATA.length; i++) {
+        insertionids.push(SLIDER_DATA[i].id);
     }
 
     insertionSort(insertionids, insertionvals) 
