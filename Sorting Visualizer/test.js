@@ -102,6 +102,8 @@ const DUMMY_DATA = [
 ];
 
 console.log("original data", DUMMY_DATA)
+gen_button = document.getElementById("generate-array");
+my_slider = document.getElementById("myRange");
 
 var xScale = d3
 .scaleBand() //Gives all bars/items the same width
@@ -272,8 +274,15 @@ async function bubbleSort(ids, vals) {
             }
             await new Promise(resolve => setTimeout(resolve, 10));
             draw(bubblearr, z);
+
+            // Disables generate array button and slider until sorting is finished
+            gen_button.disabled = true;
+            my_slider.disabled = true;
         }
     }
+    // Re-enables generate array button and slider after sorting is finished
+    gen_button.disabled = false;
+    my_slider.disabled = false;
 };
 
 /////////////////////////////////////////////   Selection Sort function    ///////////////////////////////////////////////////////
@@ -308,7 +317,14 @@ async function selectionSort(ids, vals) {
         }
         await new Promise(resolve => setTimeout(resolve, 100));
         draw(bubblearr, z);
+
+        // Disables generate array button and slider until sorting is finished
+        gen_button.disabled = true;
+        my_slider.disabled = true;
     }
+    // Re-enables generate array button and slider after sorting is finished
+    gen_button.disabled = false;
+    my_slider.disabled = false;
 }
 
 /////////////////////////////////////////////   Insertion Sort function    ///////////////////////////////////////////////////////
@@ -335,7 +351,14 @@ async function insertionSort(ids, vals) {
             }
             await new Promise(resolve => setTimeout(resolve, 100));
             draw(bubblearr, z);
+
+            // Disables generate array button and slider until sorting is finished
+            gen_button.disabled = true;
+            my_slider.disabled = true;
         }
+        // Re-enables generate array button and slider after sorting is finished
+        gen_button.disabled = false;
+        my_slider.disabled = false;
 }
 
 /////////////////////////////////////////////   Wrapper functions    ///////////////////////////////////////////////////////
