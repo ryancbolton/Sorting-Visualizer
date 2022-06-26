@@ -26,12 +26,6 @@ const DUMMY_DATA = [
     { id: 'd25', value: 11}
 ];
 
-// var vals = []; //initializes array for slider array values
-// var ids = []; //initializes array for slider array ids
-// var bubblearr = []; //empty final array
-
-var handle = null; //initializes the handle for setInterval and clearInterval
-
 console.log("original data", DUMMY_DATA)
 
 var xScale = d3
@@ -136,8 +130,6 @@ function GenerateArr(){
     });
 
     draw(DUMMY_DATA); //Draws each newly generated array
-    // ids = []; //Need to reset ids too or there will be ids with no values each time
-    // vals = []; //Need to reset this here, otherwise the vals from the last fully sorted array in bubblesort() will still be there 
 
     // Clears the setInterval of bubblesort_wrap() function to end the continuous calling of it
     clearInterval(handle);
@@ -147,42 +139,27 @@ function GenerateArr(){
 GenerateArr();
 // console.log("Before bubble sort", DUMMY_DATA)
 
-/////////////////////////////////////////////   Bubble sort function    ///////////////////////////////////////////////////////
+
+// /////////////////////////////////////////////   Sorting functions start    ///////////////////////////////////////////////////////
+
+// /////////////////////////////////////////////   Bubble sort function    ///////////////////////////////////////////////////////
 async function bubbleSort(ids, vals) {
     bubblearr = [];
-    console.log("bubblesort function", DUMMY_DATA)
-
-    //Bubble sort function (copied from https://www.geeksforgeeks.org/bubble-sort-algorithms-by-using-javascript/)
-    for(var i = 0; i < vals.length; i++){
-        // bubblearr[i] = {id: ids[i], value: vals[i]}
-     
-        // Last i elements are already in place  
-        for(var j = 0; j < (vals.length - i -1 ); j++){
-            
-            // Checking if the item at present iteration is greater than the next iteration
-            if(vals[j] > vals[j + 1]){    //Was vals[j] and vals[j+1] or DUMMY_DATA[j].value = DUMMY_DATA[j + 1].value
-                
-                ///////////////// Bubblearr version  ///////////////////////
-                // If the condition is true then swap them
-                var temp = vals[j]
-                vals[j] = vals[j + 1]
-                vals[j+1] = temp
-
-                // vals = swap(vals, j);
-
-                // Needs to go here to get the final array with the last swapped value 
-                // This loop populates 
-                for (var i = 0; i < ids.length; i++) {
-                    bubblearr[i] = {id: ids[i], value: vals[i]}
-                }
-
-                console.log(vals);
-                await new Promise(resolve => setTimeout(resolve, 25));
-                draw(bubblearr, j); //draws the new array after each pass
-            } 
+    for (let i = 0; i < vals.length; i++) {
+        for (let j = 0; j < vals.length; j++) {
+            if (vals[j] > vals[j + 1]) {
+                let tmp = vals[j];
+                vals[j] = vals[j + 1];
+                vals[j + 1] = tmp;
+            }
+            for (var z = 0; z < ids.length; z++) {
+                bubblearr[z] = {id: ids[z], value: vals[z]}
+            }
+            await new Promise(resolve => setTimeout(resolve, 10));
+            draw(bubblearr, z);
         }
     }
-}
+};
 
 /////////////////////////////////////////////   Selection Sort function    ///////////////////////////////////////////////////////
 async function selectionSort(ids, vals) {
@@ -211,41 +188,13 @@ async function selectionSort(ids, vals) {
         // This loop populates 
         for (var z = 0; z < ids.length; z++) {
             bubblearr[z] = {id: ids[z], value: vals[z]}
-            await new Promise(resolve => setTimeout(resolve, 25));
-            draw(bubblearr, z);
+            // await new Promise(resolve => setTimeout(resolve, 25));
+            // draw(bubblearr, z);
         }
-        // // bubblearr[i] = {id: ids[i], value: vals[i]}
-        // console.log("selectionsort vals", vals)
-        // console.log("selectionsort arrays", bubblearr)
-        // // await new Promise(resolve => requestAnimationFrame(resolve));
-        // await new Promise(resolve => setTimeout(resolve, 100));
-        // draw(bubblearr, z);
+        await new Promise(resolve => setTimeout(resolve, 100));
+        draw(bubblearr, z);
     }
 }
-
-// /////////////////////////////////////////////   QuickSort function    ///////////////////////////////////////////////////////
-// async function quicksort(array) {
-//     if (array.length <= 1) {
-//       return array;
-//     }
-  
-//     var pivot = array[0];
-    
-//     var left = []; 
-//     var right = [];
-  
-//     for (var i = 1; i < array.length; i++) {
-//       array[i] < pivot ? left.push(array[i]) : right.push(array[i]);
-//     }
-
-//     for (var z = 0; z < ids.length; z++) {
-//         bubblearr[z] = {id: ids[z], value: vals[z]}
-//     }
-//     await new Promise(resolve => setTimeout(resolve, 100));
-//     draw(bubblearr, z);
-  
-//     return quicksort(left).concat(pivot, quicksort(right));
-//   };
 
 /////////////////////////////////////////////   Insertion Sort function    ///////////////////////////////////////////////////////
 async function insertionSort(ids, vals) {
@@ -266,22 +215,19 @@ async function insertionSort(ids, vals) {
             // This loop populates 
             for (var z = 0; z < ids.length; z++) {
                 bubblearr[z] = {id: ids[z], value: vals[z]}
-                await new Promise(resolve => setTimeout(resolve, 25));
-                draw(bubblearr, z);
+                // await new Promise(resolve => setTimeout(resolve, 25));
+                // draw(bubblearr, z);
             }
-            // bubblearr[i] = {id: ids[i], value: vals[i]}
-            // await new Promise(resolve => requestAnimationFrame(resolve));
-            // await new Promise(resolve => setTimeout(resolve, 100));
-            // draw(bubblearr, z);
+            await new Promise(resolve => setTimeout(resolve, 100));
+            draw(bubblearr, z);
         }
 }
 
 /////////////////////////////////////////////   Wrapper functions    ///////////////////////////////////////////////////////
 
-//This function calls the first bubblesort at the set interval (1s)
 function bubbleSort_wrap() {
     bubbleids = [];
-    bubblevals = []; //Need to reset this here, otherwise the vals from the last fully sorted array in bubblesort() will still be there 
+    bubblevals = []; 
     //Adds the values from the DUMMY_DATA array to the empty 'vals' array
     for (var i = 0; i < DUMMY_DATA.length; i++) {
         bubblevals.push(DUMMY_DATA[i].value);
@@ -292,12 +238,9 @@ function bubbleSort_wrap() {
         bubbleids.push(DUMMY_DATA[i].id);
     }
 
-    //Starts an interval to continously call bubblesort until the array is sorted
-    // handle = setInterval(bubbleSort, 100); 
-    bubbleSort(bubbleids, bubblevals);
+    bubbleSort(bubbleids, bubblevals) 
 }
 
-//This function calls the first selectionsort at the set interval (1s)
 function selectionSort_wrap() {
     selectionids = [];
     selectionvals = []; 
@@ -311,28 +254,9 @@ function selectionSort_wrap() {
         selectionids.push(DUMMY_DATA[i].id);
     }
 
-    //Starts an interval to continously call selection sort until the array is sorted
-    // handle = setTimeout(selectionSort(selectionids, selectionvals), 100); 
     selectionSort(selectionids, selectionvals);
 }
 
-// //This function calls the first selectionsort at the set interval (1s)
-// function quickSort_wrap() {
-//     //Adds the values from the DUMMY_DATA array to the empty 'vals' array
-//     for (var i = 0; i < DUMMY_DATA.length; i++) {
-//         vals.push(DUMMY_DATA[i].value);
-//     }
-
-//     //Adds the ids from the DUMMY_DATA array to the empty 'ids' array
-//     for (var i = 0; i < DUMMY_DATA.length; i++) {
-//         ids.push(DUMMY_DATA[i].id);
-//     }
-
-//     //Starts an interval to continously call selection sort until the array is sorted
-//     handle = setInterval(quicksort(vals), 100); 
-// }
-
-//This function calls the first selectionsort at the set interval (1s)
 function insertionSort_wrap() {
     insertionids = [];
     insertionvals = []; 
@@ -346,8 +270,6 @@ function insertionSort_wrap() {
         insertionids.push(DUMMY_DATA[i].id);
     }
 
-    //Starts an interval to continously call selection sort until the array is sorted
-    // handle = setTimeout(insertionSort(insertionids, insertionvals), 100);
     insertionSort(insertionids, insertionvals) 
 }
 
