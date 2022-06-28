@@ -102,6 +102,7 @@ const DUMMY_DATA = [
 ];
 
 console.log("original data", DUMMY_DATA)
+
 gen_button = document.getElementById("generate-array");
 my_slider = document.getElementById("myRange");
 
@@ -421,3 +422,11 @@ function insertionSort_wrap() {
 // 4. Add the slider back in
 // 5. Try to add at least 1 more complex sorting alg (quicksort, mergesort, heapsort, etc.)
 // 6. Add a rate slider to change how fast the algs sort
+
+
+//For the problem concerning the piled up bars on the left when generatearr is presses:
+/* The bars being stacked are the ones in DUMMY_DATA that are NOT being rendered on the screen 
+    due to SLIDER_DATA now being drawn first via update() which changes the scale of the container.
+*/
+//Removing these bars should fix this, just gotta figure out how/when to do it
+
