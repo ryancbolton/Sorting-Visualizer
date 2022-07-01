@@ -127,6 +127,13 @@ function draw(arr, j, color) {
     // Removes any existing bars (rects) before each redraw
     container.selectAll('rect').remove()
 
+    //Change xscale to be based off arr (orignally in update function for slider)
+    xScale = d3
+        .scaleBand() //Gives all bars/items the same width
+        .domain(arr.map((dataPoint) => dataPoint.id)) //Tells scaleBand() how many data points there are based on the number of ids
+        .rangeRound([0, 1000]) //Sets the range of the area the bars are generated in, i.e. the width of the container
+        .padding(0.1); //Puts padding between the bars
+
     // Adds the new bars in
     container
     .selectAll('.bar')
@@ -190,56 +197,23 @@ function draw(arr, j, color) {
 
 // }
 
+
+/////////////////////////////////////////////   Slider functions    ///////////////////////////////////////////////////////
+
+var slider = document.getElementById("myRange");
+var output = document.getElementById("demo");
+
+//Event listener to detect when slider is being used and invoke update
+slider.addEventListener('input', GenerateArr);
+
 /////////////////////////////////////////////   Generate button functions    ///////////////////////////////////////////////////////
 // Grabs the "Generate Array" button
 // var newarr = document.getElementById("generate-array");
 function GenerateArr(){
-    //Find index of specific object using findIndex method. 
-    objIndex = DUMMY_DATA.findIndex((obj => obj.id));
-
-    //Update object's value properties.
-    DUMMY_DATA.forEach(obj => {
-        for (var i = 0; i < DUMMY_DATA.length; i++) {
-            DUMMY_DATA[i].value = Math.floor(Math.random() * 16);
-        }
-    });
-
-    draw(DUMMY_DATA); //Draws each newly generated array
-    
-};
-
-GenerateArr();
-// console.log("Before bubble sort", DUMMY_DATA)
-
-
-
-
-/////////////////////////////////////////////   Slider functions    ///////////////////////////////////////////////////////
-var slider = document.getElementById("myRange");
-var output = document.getElementById("demo");
-
-// Display the default slider value and print to console
-output.innerHTML = slider.value;
-// console.log(slider.value)
-
-// //Take portion of original dataset
-// SLIDER_DATA = DUMMY_DATA.slice(0, slider.value)
-
-update=()=>{
-
     //Output currently updated slider value and print to console
     output.innerHTML = slider.value; 
-    console.log(slider.value)
 
-    //Take portion of original dataset
     SLIDER_DATA = DUMMY_DATA.slice(0, slider.value)
-
-    //Change xscale to be based off new SLIDER array instead of original DUMMY array
-    xScale = d3
-        .scaleBand() //Gives all bars/items the same width
-        .domain(SLIDER_DATA.map((dataPoint) => dataPoint.id)) //Tells scaleBand() how many data points there are based on the number of ids
-        .rangeRound([0, 1000]) //Sets the range of the area the bars are generated in, i.e. the width of the container
-        .padding(0.1); //Puts padding between the bars
 
     //Update object's value properties.
     SLIDER_DATA.forEach(obj => {
@@ -248,14 +222,12 @@ update=()=>{
         }
     });
 
-    draw(SLIDER_DATA);
+    draw(SLIDER_DATA); //Draws each newly generated array
+    
+};
 
-}   
-//Event listener to detect when slider is being used and invoke update
-slider.addEventListener('input', update);
-
-//Creates global slider data array for use in the sorting functions (was previously inside the sorting function itself below vals array initiation)
-var SLIDER_DATA = update()
+GenerateArr();
+// console.log("Before bubble sort", DUMMY_DATA)
 
 
 // /////////////////////////////////////////////   Sorting functions start    ///////////////////////////////////////////////////////
@@ -422,11 +394,3 @@ function insertionSort_wrap() {
 // 4. Add the slider back in
 // 5. Try to add at least 1 more complex sorting alg (quicksort, mergesort, heapsort, etc.)
 // 6. Add a rate slider to change how fast the algs sort
-
-
-//For the problem concerning the piled up bars on the left when generatearr is presses:
-/* The bars being stacked are the ones in DUMMY_DATA that are NOT being rendered on the screen 
-    due to SLIDER_DATA now being drawn first via update() which changes the scale of the container.
-*/
-//Removing these bars should fix this, just gotta figure out how/when to do it
-
