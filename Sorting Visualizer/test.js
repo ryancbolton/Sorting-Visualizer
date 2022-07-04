@@ -101,6 +101,8 @@ const DUMMY_DATA = [
     { id: 'd100', value: 11},
 ];
 
+mergeids = [];
+
 console.log("original data", DUMMY_DATA)
 
 gen_button = document.getElementById("generate-array");
@@ -334,6 +336,53 @@ async function insertionSort(ids, vals) {
         my_slider.disabled = false;
 }
 
+/////////////////////////////////////////////   Merge Sort function    ///////////////////////////////////////////////////////
+function merge(left, right) {
+    let arr = []
+    // Break out of loop if any one of the array gets empty
+    while (left.length && right.length) {
+        // Pick the smaller among the smallest element of left and right sub arrays 
+        if (left[0] < right[0]) {
+            arr.push(left.shift())  
+        } else {
+            arr.push(right.shift()) 
+        }
+    }
+    
+    // Concatenating the leftover elements
+    // (in case we didn't go through the entire left or right array)
+    return [ ...arr, ...left, ...right ]
+}
+
+function mergeSort(vals) {
+    bubblearr = [];
+
+    // console.log(vals)
+    // console.log(vals.length)
+    const half = vals.length / 2
+    
+    // Base case or terminating case
+    if(vals.length < 2){
+      return vals 
+    //   console.log(vals)
+    }
+    
+
+    // // Needs to go here to get the final array with the last swapped value 
+    // // This loop populates 
+    // for (var z = 0; z < mergeids.length; z++) {
+    //     bubblearr[z] = {id: mergeids[z], value: vals[z]}
+    //     // await new Promise(resolve => setTimeout(resolve, 25));
+    //     // draw(bubblearr, z);
+    // }
+    // // await new Promise(resolve => setTimeout(resolve, 100));
+    // draw(bubblearr, z);
+
+    const left = vals.splice(0, half)
+    return merge(mergeSort(left), mergeSort(vals))
+    // console.log(merge(mergeSort(left), mergeSort(vals)))
+}
+
 /////////////////////////////////////////////   Wrapper functions    ///////////////////////////////////////////////////////
 
 function bubbleSort_wrap() {
@@ -385,6 +434,24 @@ function insertionSort_wrap() {
     }
 
     insertionSort(insertionids, insertionvals) 
+}
+
+function mergeSort_wrap() {
+    // mergeids = [];
+    mergevals = []; 
+    SLIDER_DATA = DUMMY_DATA.slice(0, slider.value)
+    //Adds the values from the DUMMY_DATA array to the empty 'vals' array
+    for (var i = 0; i < SLIDER_DATA.length; i++) {
+        mergevals.push(SLIDER_DATA[i].value);
+    }
+
+    //Adds the ids from the DUMMY_DATA array to the empty 'ids' array
+    for (var i = 0; i < SLIDER_DATA.length; i++) {
+        mergeids.push(SLIDER_DATA[i].id);
+    }
+
+    // mergeSort(mergevals);
+    console.log(mergeSort(mergevals));
 }
 
 // To do:
