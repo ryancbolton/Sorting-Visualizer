@@ -3,7 +3,7 @@ A simple script using html, css, and d3.js, to interactively visualize different
 
 ## Project Status
 
-This project is currently in development. Users can generate a new random array by refreshing the page, and bubble sort works and shows each sorting step. Future plans are to combine the current iteration with the previous one to bring back the slider to change the array size. Final plans include adding the other sorting algorithms, such as quick sort, merge sort, etc. 
+This project is currently in development. Users can generate a new random array by refreshing the page, change the size of the array via a slider, and bubble sort, insertion sort, and selection sort all work and show each sorting step. Future plans include adding the other sorting algorithms, such as quick sort, merge sort, etc., adding labels for the sizes of the bars, and adding a slider to control how fast or slow the algorithms sort. 
 
 ## Project Screen Shots
 
@@ -36,6 +36,6 @@ Some challenges I ran into early on were getting used to d3.js `enter()`, `updat
 
 The biggest challenge I ran into was getting the bar chart to update each step as the algorithm sorted the array. At first I was only able to get the final sorted graph to display, so I created a `draw()` function and used `setInterval` to control how quickly each graph was drawn compared to how quickly it was being sorted with the nested for loops in the `bubblesort()` function. 
 
-Currently I am working on adding other sorting algorithms and combining the code as it is now with my first iteration, which included the random generate button and slider, but could not sort the data.
+Currently I am working on adding more sorting algorithms and adding more features, such as a rate slider, labels for the bars, and eventually a drop-down menu for the algs once I add in enough of them.
 
 I hope to continue adding more and more sorting algorithms and eventually giving the user the choice to display multiple graphs at once and compare each sorting algorithm on them at the same time. 
