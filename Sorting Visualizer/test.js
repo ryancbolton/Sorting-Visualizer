@@ -355,7 +355,7 @@ function merge(left, right) {
 }
 
 function mergeSort(vals) {
-    bubblearr = [];
+    // bubblearr = [];
 
     // console.log(vals)
     // console.log(vals.length)
@@ -381,6 +381,36 @@ function mergeSort(vals) {
     const left = vals.splice(0, half)
     return merge(mergeSort(left), mergeSort(vals))
     // console.log(merge(mergeSort(left), mergeSort(vals)))
+}
+
+/////////////////////////////////////////////   Quick Sort function    ///////////////////////////////////////////////////////
+function quickSort(array) {
+    bubblearr = [];
+    
+    if (array.length <= 1) {
+        return array;
+      }
+    
+      var pivot = array[0];
+      
+      var left = []; 
+      var right = [];
+    
+      for (var i = 1; i < array.length; i++) {
+        array[i] < pivot ? left.push(array[i]) : right.push(array[i]);
+      }
+
+
+    //   for (var z = 0; z < ids.length; z++) {
+    //     bubblearr[z] = {id: ids[z], value: vals[z]}
+    //     // await new Promise(resolve => setTimeout(resolve, 25));
+    //     // draw(bubblearr, z);
+    //     }
+    //     await new Promise(resolve => setTimeout(resolve, 100));
+    //     draw(bubblearr, z);
+    
+      return quickSort(left).concat(pivot, quickSort(right)); //returning array of ints (vals array)
+
 }
 
 /////////////////////////////////////////////   Wrapper functions    ///////////////////////////////////////////////////////
@@ -451,7 +481,24 @@ function mergeSort_wrap() {
     }
 
     // mergeSort(mergevals);
-    console.log(mergeSort(mergevals));
+    console.log('Mergesort sorted array', mergeSort(mergevals));
+}
+
+function quickSort_wrap() {
+    quickids = [];
+    quickvals = []; 
+    SLIDER_DATA = DUMMY_DATA.slice(0, slider.value)
+    //Adds the values from the DUMMY_DATA array to the empty 'vals' array
+    for (var i = 0; i < SLIDER_DATA.length; i++) {
+        quickvals.push(SLIDER_DATA[i].value);
+    }
+
+    //Adds the ids from the DUMMY_DATA array to the empty 'ids' array
+    for (var i = 0; i < SLIDER_DATA.length; i++) {
+        quickids.push(SLIDER_DATA[i].id);
+    }
+
+    console.log('Quicksort sorted array', quickSort(quickvals));
 }
 
 // To do:
