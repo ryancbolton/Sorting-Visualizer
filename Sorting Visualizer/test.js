@@ -384,7 +384,7 @@ function mergeSort(vals) {
 }
 
 /////////////////////////////////////////////   Quick Sort function    ///////////////////////////////////////////////////////
-function quickSort(array) {
+async function quickSort(array) {
     bubblearr = [];
     
     if (array.length <= 1) {
@@ -401,13 +401,13 @@ function quickSort(array) {
       }
 
 
-    //   for (var z = 0; z < ids.length; z++) {
-    //     bubblearr[z] = {id: ids[z], value: vals[z]}
-    //     // await new Promise(resolve => setTimeout(resolve, 25));
-    //     // draw(bubblearr, z);
-    //     }
-    //     await new Promise(resolve => setTimeout(resolve, 100));
-    //     draw(bubblearr, z);
+      for (var z = 0; z < array.length; z++) {
+        bubblearr[z] = {id: quickids[z], value: array[z]}
+        await new Promise(resolve => setTimeout(resolve, 25));
+        draw(bubblearr, z);
+        }
+        // await new Promise(resolve => setTimeout(resolve, 100));
+        // draw(bubblearr, z);
     
       return quickSort(left).concat(pivot, quickSort(right)); //returning array of ints (vals array)
 
@@ -484,8 +484,10 @@ function mergeSort_wrap() {
     console.log('Mergesort sorted array', mergeSort(mergevals));
 }
 
+
+quickids = [];
 function quickSort_wrap() {
-    quickids = [];
+    // quickids = [];
     quickvals = []; 
     SLIDER_DATA = DUMMY_DATA.slice(0, slider.value)
     //Adds the values from the DUMMY_DATA array to the empty 'vals' array
